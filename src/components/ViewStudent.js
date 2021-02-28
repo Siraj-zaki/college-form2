@@ -3,7 +3,7 @@ import Header from '../header';
 import '../index.css'
 import img from '../../src/assets/img.jpg'
 import { Table } from 'react-bootstrap';
-export default class ViewStudent extends Component {
+ class ViewStudent extends Component {
     state = {
         staffdata: [
             {
@@ -187,3 +187,5 @@ export default class ViewStudent extends Component {
 
 
 }
+
+export default (ViewStudent);

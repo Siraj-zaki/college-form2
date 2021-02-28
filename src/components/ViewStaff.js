@@ -5,7 +5,7 @@ import { Table } from 'react-bootstrap';
 import Loader from 'react-loader-spinner'
 import pic from '../assets/img.jpg'
 
-export default class ViewStaff extends Component {
+ class ViewStaff extends Component {
     state = {
         staffdata: [
             { username: 'Siraj', password: '123456789', name: 'Siraj Zaki', gender: 'male', phone: '03137669964', insitituteName: 'Multiware', picture: pic },
@@ -93,3 +93,6 @@ export default class ViewStaff extends Component {
         )
     }
 }
+
+
+export default (ViewStaff);

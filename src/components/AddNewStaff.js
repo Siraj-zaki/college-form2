@@ -3,8 +3,49 @@ import Header from '../header';
 import ImageUpload from './ImagePicker'
 import '../index.css'
 import Loader from 'react-loader-spinner'
+import firebase from 'firebase'
 
-export default class AddNewStaff extends Component {
+class AddNewStaff extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: '', userName: '', password: '', email: '', phone: '',
+        }
+    }
+
+
+    uploadHandler = (file) => {
+
+        let name = 'image name'
+
+
+        if (file === '') {
+            // setProgress(50)
+            // finishingEditCategory(cImage)
+        }
+        else {
+
+            const uploadTask = firebase.storage().ref('category/' + name).put(file)
+            uploadTask.on('state_changed', function (snapshot) {
+                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                // setProgress(progress)
+            }, function (error) {
+                return alert(JSON.stringify(error))
+                // Handle unsuccessful uploads
+            }, function () {
+                // Handle successful uploads on complete
+                // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                firebase.storage().ref('category').child(name).getDownloadURL()
+                    .then(url => {
+                        // finishingEditCategory(url)
+                    })
+            });
+
+        }
+
+    }
+
     render() {
         return (
 
@@ -26,7 +67,7 @@ export default class AddNewStaff extends Component {
                             <input type="password" class="form-control form-control-sm" id="last-name" placeholder="Password"></input>
                         </div>
                     </div>
-                    
+
 
                     <div className="form-row ">
                         <div class="form-group col-md-5">
@@ -57,9 +98,9 @@ export default class AddNewStaff extends Component {
                             </select>
                         </div>
                     </div>
-                    
+
                     {/* <button type="submit" class="btn btn-primary margin-top">Sign in</button> */}
-                                        <button type="button" class="btn btn-primary margin-top hide-on-print" onClick={() => window.print()} >Print</button>
+                    <button type="button" class="btn btn-primary margin-top hide-on-print" onClick={() => window.print()} >Print</button>
                 </form>
 
             </div>
@@ -67,3 +108,5 @@ export default class AddNewStaff extends Component {
         )
     }
 }
+
+export default (AddNewStaff);

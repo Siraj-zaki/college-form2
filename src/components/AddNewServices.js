@@ -85,7 +85,7 @@ class TodoApp extends React.Component {
   }
 }
 
-export default TodoApp
+export default (TodoApp);
 class TodoItem extends React.Component {
   constructor(props) {
     super(props);

@@ -81,4 +81,4 @@ class FeeCollection extends React.Component {
         )
     }
 }
-export default FeeCollection;
+export default (FeeCollection);

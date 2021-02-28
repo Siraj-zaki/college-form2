@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Header from '../header';
 import '../index.css'
 import Loader from 'react-loader-spinner'
-export default class FeeCollection extends Component {
+ class FeeCollection extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -86,3 +86,5 @@ export default class FeeCollection extends Component {
         )
     }
 }
+
+export default (FeeCollection);

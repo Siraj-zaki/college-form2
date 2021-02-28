@@ -1,6 +1,6 @@
 import React from "react";
-import { Route } from "react-router-dom";
-import login from "../components/login";
+import { Route, Redirect } from "react-router-dom";
+import Login from "../components/Login";
 import Posts from "../components/Posts";
 import AddNewStudent from "../components/AddNewStudent";
 import AddNewServices from "../components/AddNewServices";
@@ -14,11 +14,35 @@ import FeeReport from '../components/FeeReport';
 import ViewStudentData from '../components/ViewStudentData';
 import ClassForm from '../components/ClassForm';
 import ClassGeneration from '../components/ClassGeneration';
+import { PersistGate } from "redux-persist/integration/react";
+import { connect, Provider } from "react-redux";
+import store from "../store/store";
+// import {store,per} from '../store/store'
+
 class ReactRouter extends React.Component {
+
+  componentDidMount() {
+
+    if (this.props.logged) {
+      return (
+        <Redirect to='/posts' />
+      )
+    }
+    else {
+      return (
+        <Redirect to='/' />
+      )
+    }
+
+  }
+
   render() {
+    // console.log(this.props.logged)
     return (
+
       <React.Fragment>
-        <Route exact path="/" component={login} />
+
+        <Route exact path="/" component={Login} />
         <Route path="/posts" component={Posts} />
         <Route path="/AddNewStudent" component={AddNewStudent} />
         <Route path="/AddNewServices" component={AddNewServices} />
@@ -37,4 +61,11 @@ class ReactRouter extends React.Component {
   }
 }
 
-export default ReactRouter;
+const mapState = state => {
+  return {
+    logged: state.authReducers.logged
+  }
+}
+
+
+export default connect(mapState, null)(ReactRouter);

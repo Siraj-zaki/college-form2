@@ -3,7 +3,7 @@ import Header from '../header';
 import ImageUpload from './ImagePicker';
 import '../index.css'
 
-export default class ClassGeneration extends Component {
+ class ClassGeneration extends Component {
     myfunc = (e) => {
         window.print()
     }
@@ -140,3 +140,6 @@ export default class ClassGeneration extends Component {
         )
     }
 }
+
+
+export default (ClassGeneration);

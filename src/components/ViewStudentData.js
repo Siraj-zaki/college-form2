@@ -4,7 +4,7 @@ import '../index.css'
 import { Table } from 'react-bootstrap';
 import Loader from 'react-loader-spinner'
 
-export default class ViewStudentData extends Component {
+class ViewStudentData extends Component {
     state = {
         staffdata: [
             {
@@ -141,3 +141,6 @@ export default class ViewStudentData extends Component {
         )
     }
 }
+
+
+export default (ViewStudentData);

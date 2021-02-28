@@ -3,7 +3,7 @@ import Header from '../header';
 import ImageUpload from './ImagePicker';
 import '../index.css'
 
-export default class AddNewStudent extends Component {
+ class ClassForm extends Component {
   myfunc = (e) => {
     alert("Student Add")
     window.location.href="/ViewStudentData"
@@ -139,3 +139,5 @@ export default class AddNewStudent extends Component {
     )
   }
 }
+
+export default (ClassForm);
