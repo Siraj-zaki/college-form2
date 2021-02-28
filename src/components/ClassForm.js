@@ -3,7 +3,7 @@ import Header from '../header';
 import ImageUpload from './ImagePicker';
 import '../index.css'
 
-export default class AddNewStudent extends Component {
+class ClassForm extends Component {
   state = {
     classname: "",
     semester: "",

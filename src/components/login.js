@@ -15,6 +15,7 @@ class Login extends React.Component {
   formfunct = (e) => {
     e.preventDefault()
     this.props.setLogged(true)
+    window.location.href = "/Posts"
   }
   render() {
     return (
@@ -26,7 +27,7 @@ class Login extends React.Component {
           <div class="form-group">
             <label for="exampleInputEmail1">College Code</label>
             <input onChange={(e) => this.setState({ email: e.target.value })} type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter College Code" required></input>
-            <small id="emailHelp" style={{visibility:'hidden'}} class="form-text text-muted">We'll never share your email with anyone else.</small>
+            <small id="emailHelp" style={{ visibility: 'hidden' }} class="form-text text-muted">We'll never share your email with anyone else.</small>
           </div>
           <div class="form-group">
             <label for="User-Name">User Name</label>

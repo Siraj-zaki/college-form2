@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import Header from '../header';
 import ImageUpload from './ImagePicker';
 import '../index.css'
-
-export default class ClassGeneration extends Component {
+ class ClassGeneration extends Component {
   state = {
     class: "",
     semester: "",

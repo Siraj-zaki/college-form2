@@ -2,6 +2,7 @@
 import { Path } from './Path'
 
 
+
 const loginUser = async (email, pass) => {
 
     let getData = []; let err = '';
@@ -129,11 +130,7 @@ const sendEmail = async (email, num) => {
         .then(res => getData = res)
         .catch(err => err = err)
 
-    if (err === '') { return getData }
-    else { return { message: error } }
-
 }
-
 const setNewPassword = async (email, pass) => {
     //console.log('runn')
     let getData = []; let err = '';
@@ -269,7 +266,6 @@ const acceptRequest = async (token, uid, rid) => {
         .then((dat) => { getData = dat; })
         .catch(err => { alert("Friend", err.message); getData = false })
 
-    console.log(Platform.Version + ' accept friend->', getData)
     if (getData?.success === 'false') {
         alert("Friend", getData.message); getData = false
     }
@@ -288,7 +284,6 @@ const deleteFriendRequest = async (token, rid) => {
         .then((dat) => { getData = dat; })
         .catch(err => { alert("Friend", err.message); getData = false })
 
-    console.log(Platform.Version + ' delete friend->', getData)
     if (getData?.success === 'false') {
         alert("Friend", getData.message); getData = false
     }
