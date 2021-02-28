@@ -10,7 +10,8 @@ class TodoApp extends React.Component {
 
     this.state = {
       items: [],
-      text: ""
+      text: "",
+
     };
 
     this.handleTextChange = this.handleTextChange.bind(this);
@@ -70,7 +71,7 @@ class TodoApp extends React.Component {
         <div style={{ alignSelf: 'flex-start' }}>
           <form className="row">
             <div className="col-md-8">
-              <input type="text" className="form-control" onChange={this.handleTextChange} value={this.state.text} />
+              <input  type="text" className="form-control" onChange={this.handleTextChange} value={this.state.text} />
             </div>
             <button className="btn btn-primary" style={{ fontSize: '10px' }} onClick={this.handleAddItem} disabled={!this.state.text}>{"Add New Services #" + (this.state.items.length + 1)}</button>
           </form>

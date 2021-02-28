@@ -4,11 +4,20 @@ import ImageUpload from './ImagePicker';
 import '../index.css'
 
 export default class AddNewStudent extends Component {
+  state = {
+    classname: "",
+    semester: "",
+    rollno: "",
+    dated: "",
+    fee: "",
+
+  }
   myfunc = (e) => {
     alert("Student Add")
-    window.location.href="/ViewStudentData"
+    window.location.href = "/ViewStudentData"
     e.preventDefault()
   }
+
   render() {
     return (
       <div
@@ -23,21 +32,21 @@ export default class AddNewStudent extends Component {
           <div className="form-row">
             <div class="form-group col-md-5">
               <label for="first-name"> Class Name </label>
-              <input type="text" class="form-control form-control-sm" id="first-name" placeholder="Class Name" required></input>
+              <input onChange={(e) => this.setState({ classname: e.target.value })} type="text" class="form-control form-control-sm" id="first-name" placeholder="Class Name" required></input>
             </div>
             <div class="form-group col-md-5">
               <label for="last-name">Semester</label>
-              <input type="text" class="form-control form-control-sm" id="last-name" placeholder="Semester" required></input>
+              <input onChange={(e) => this.setState({ semester: e.target.value })} type="text" class="form-control form-control-sm" id="last-name" placeholder="Semester" required></input>
             </div>
           </div>
           <div className="form-row">
             <div class="form-group col-md-5">
               <label for="date-of-birth">Roll No </label>
-              <input type="number" class="form-control form-control-sm" id="date-of-birth" placeholder="19-740" required></input>
+              <input onChange={(e) => this.setState({ rollno: e.target.value })} type="number" class="form-control form-control-sm" id="date-of-birth" placeholder="19-740" required></input>
             </div>
             <div class="form-group col-md-5">
               <label for="place-of-birth">Dated </label>
-              <input type="date" class="form-control form-control-sm" id="place-of-birth" placeholder="Dated"></input>
+              <input onChange={(e) => this.setState({ dated: e.target.value })} type="date" class="form-control form-control-sm" id="place-of-birth" placeholder="Dated"></input>
             </div>
           </div>
           <div className="form-row">

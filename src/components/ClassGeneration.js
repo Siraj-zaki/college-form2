@@ -4,49 +4,57 @@ import ImageUpload from './ImagePicker';
 import '../index.css'
 
 export default class ClassGeneration extends Component {
-    myfunc = (e) => {
-        window.print()
-    }
-    render() {
-        return (
-            <div
-                className='admin-page add-new-student'
-            >
-                <Header />
-                <div className='admin-heading'>
-                    <h1>Class Generation</h1>
-                </div>
-                <hr />
-                <form onSubmit={this.myfunc}>
-                    <div className="form-row">
-                        <div class="form-group col-md-3">
-                            <label for="first-name"> Your Class </label>
-                            <input type="text" class="form-control form-control-sm" id="first-name" placeholder="Class Name" required></input>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="last-name">Your Semester</label>
-                            <input type="text" class="form-control form-control-sm" id="last-name" placeholder="Semester" required></input>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="last-name">No Of Semester</label>
-                            <input type="text" class="form-control form-control-sm" id="last-name" placeholder="Semester" required></input>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="last-name">Your Semester Fee</label>
-                            <input type="text" class="form-control form-control-sm" id="last-name" placeholder="Semester" required></input>
-                        </div>
-                    </div>
-                    <div className="form-row">
-                        <div class="form-group col-md-3">
-                            <label for="date-of-birth">Your Fee </label>
-                            <input type="number" class="form-control form-control-sm" id="date-of-birth" placeholder="19-740" required></input>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="place-of-birth">Dated </label>
-                            <input type="date" class="form-control form-control-sm" id="place-of-birth" placeholder="Dated"></input>
-                        </div>
-                    </div>
-                    {/* <div className="form-row">
+  state = {
+    class: "",
+    semester: "",
+    noofsemester: "",
+    semesterfee: "",
+    fee: "",
+    dated: "",
+  }
+  myfunc = (e) => {
+    window.print()
+  }
+  render() {
+    return (
+      <div
+        className='admin-page add-new-student'
+      >
+        <Header />
+        <div className='admin-heading'>
+          <h1>Class Generation</h1>
+        </div>
+        <hr />
+        <form onSubmit={this.myfunc}>
+          <div className="form-row">
+            <div class="form-group col-md-3">
+              <label for="first-name"> Your Class </label>
+              <input onChange={(e) => this.setState({ class: e.target.value })} type="text" class="form-control form-control-sm" id="first-name" placeholder="Class Name" required></input>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="last-name">Your Semester</label>
+              <input onChange={(e) => this.setState({ semester: e.target.value })} type="text" class="form-control form-control-sm" id="last-name" placeholder="Semester" required></input>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="last-name">No Of Semester</label>
+              <input onChange={(e) => this.setState({ noofsemester: e.target.value })} type="text" class="form-control form-control-sm" id="last-name" placeholder="Semester" required></input>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="last-name">Your Semester Fee</label>
+              <input onChange={(e) => this.setState({ semesterfee: e.target.value })} type="text" class="form-control form-control-sm" id="last-name" placeholder="Semester" required></input>
+            </div>
+          </div>
+          <div className="form-row">
+            <div class="form-group col-md-3">
+              <label for="date-of-birth">Your Fee </label>
+              <input onChange={(e) => this.setState({ fee: e.target.value })} type="number" class="form-control form-control-sm" id="date-of-birth" placeholder="19-740" required></input>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="place-of-birth">Dated </label>
+              <input onChange={(e) => this.setState({ dated: e.target.value })} type="date" class="form-control form-control-sm" id="place-of-birth" placeholder="Dated"></input>
+            </div>
+          </div>
+          {/* <div className="form-row">
             <div class="form-group col-md-3">
               <label for="Contact">Contact</label>
               <input type="number" class="form-control form-control-sm" id="Contact" placeholder="Contact"></input>
@@ -132,11 +140,11 @@ export default class ClassGeneration extends Component {
               <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
             </div>
           </div> */}
-                    {/* <button type="submit" class="btn btn-primary" style={{ marginBottom: '50px' }}>Add</button> */}
-                    <button type="submit" class="btn btn-primary margin-top hide-on-print"  >Print</button>
-                </form>
-            </div>
+          {/* <button type="submit" class="btn btn-primary" style={{ marginBottom: '50px' }}>Add</button> */}
+          <button type="submit" class="btn btn-primary margin-top hide-on-print"  >Print</button>
+        </form>
+      </div>
 
-        )
-    }
+    )
+  }
 }

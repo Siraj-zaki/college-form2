@@ -114,14 +114,14 @@ class TodoItem extends React.Component {
   render() {
     return (
       <div>
-      <Table className='itemClass' ref={li => this._listItem = li}  >
-        <thead style={{ width: 400 }} >
-          <td style={{ width: 400, justifyContent: 'space-between', display: 'flex' }}>
-            <span>{this.props.text}</span>
-            <button type="button" className="btn btn-danger btn-sm" onClick={this.deleteItem} style={{ marginLeft: 50 }}>x</button>
-          </td>
-        </thead >
-      </Table>
+        <Table className='itemClass' ref={li => this._listItem = li}  >
+          <thead style={{ width: 400 }} >
+            <td style={{ width: 400, justifyContent: 'space-between', display: 'flex' }}>
+              <span>{this.props.text}</span>
+              <button type="button" className="btn btn-danger btn-sm" onClick={this.deleteItem} style={{ marginLeft: 50 }}>x</button>
+            </td>
+          </thead >
+        </Table>
       </div>
     );
   }
