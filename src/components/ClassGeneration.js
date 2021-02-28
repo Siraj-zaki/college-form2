@@ -148,3 +148,6 @@ export default class ClassGeneration extends Component {
     )
   }
 }
+
+
+export default (ClassGeneration);

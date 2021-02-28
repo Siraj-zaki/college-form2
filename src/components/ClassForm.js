@@ -148,3 +148,5 @@ export default class AddNewStudent extends Component {
     )
   }
 }
+
+export default (ClassForm);

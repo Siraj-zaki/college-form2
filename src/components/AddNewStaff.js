@@ -4,7 +4,10 @@ import ImageUpload from './ImagePicker'
 import '../index.css'
 import Loader from 'react-loader-spinner'
 
-export default class AddNewStaff extends Component {
+import firebase from 'firebase'
+
+class AddNewStaff extends Component {
+
     state = {
         username: "",
         password: "",
@@ -14,6 +17,39 @@ export default class AddNewStaff extends Component {
         gender: "",
 
     }
+
+    uploadHandler = (file) => {
+
+        let name = 'image name'
+
+
+        if (file === '') {
+            // setProgress(50)
+            // finishingEditCategory(cImage)
+        }
+        else {
+
+            const uploadTask = firebase.storage().ref('category/' + name).put(file)
+            uploadTask.on('state_changed', function (snapshot) {
+                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                // setProgress(progress)
+            }, function (error) {
+                return alert(JSON.stringify(error))
+                // Handle unsuccessful uploads
+            }, function () {
+                // Handle successful uploads on complete
+                // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                firebase.storage().ref('category').child(name).getDownloadURL()
+                    .then(url => {
+                        // finishingEditCategory(url)
+                    })
+            });
+
+        }
+    }
+
+
+
     render() {
         return (
 
@@ -76,3 +112,5 @@ export default class AddNewStaff extends Component {
         )
     }
 }
+
+export default (AddNewStaff);

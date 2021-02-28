@@ -6,7 +6,7 @@ import moment from 'moment';
 import HBL from '../assets/Capture.PNG'
 import '../index.css'
 
-export default class AddNewStudent extends Component {
+ class AddNewStudent extends Component {
   state = {
 
     firstname: '',
@@ -760,3 +760,6 @@ export default class AddNewStudent extends Component {
     )
   }
 }
+
+
+export default (AddNewStudent);

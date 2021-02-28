@@ -2,16 +2,19 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom"
 import '../index.css'
 import Loader from 'react-loader-spinner'
-class App extends React.Component {
+import { connect } from "react-redux";
+import { setLogged } from '../store/actions/authActions'
+
+class Login extends React.Component {
   state = {
     username: 'user',
     password: 'pass',
-    email: '',
+    collogeCode: '',
 
   }
   formfunct = (e) => {
     e.preventDefault()
-    window.location.href = '/posts'
+    this.props.setLogged(true)
   }
   render() {
     return (
@@ -21,9 +24,9 @@ class App extends React.Component {
         </div>
         <form onSubmit={this.formfunct}>
           <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input onChange={(e) => this.setState({ email: e.target.value })} type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Email" required></input>
-            <small style={{visibility:'hidden'}} id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            <label for="exampleInputEmail1">College Code</label>
+            <input onChange={(e) => this.setState({ email: e.target.value })} type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter College Code" required></input>
+            <small id="emailHelp" style={{visibility:'hidden'}} class="form-text text-muted">We'll never share your email with anyone else.</small>
           </div>
           <div class="form-group">
             <label for="User-Name">User Name</label>
@@ -43,7 +46,15 @@ class App extends React.Component {
   }
 }
 
+const mapState = state => {
+  return {
 
+  }
+}
+const mapDispatch = dispatch => {
+  return {
+    setLogged: (val) => dispatch(setLogged(val))
+  }
+}
 
-
-export default App;
+export default connect(mapState, mapDispatch)(Login);

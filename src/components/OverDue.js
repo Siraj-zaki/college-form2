@@ -3,7 +3,7 @@ import Header from '../header';
 import '../index.css'
 import { Table } from 'react-bootstrap';
 import Loader from 'react-loader-spinner'
-export default class ViewStaff extends Component {
+class OverDue extends Component {
     state = {
         staffdata: [
             { studentname: 'Siraj', rollno: '123456789', name: 'Siraj Zaki', gender: 'male', phone: '03137669964', insitituteName: 'Multiware', lastdate: 'mm/dd/yyyy', fee: '3000', fathername: 'Muneer Ahmed' },
@@ -91,3 +91,5 @@ export default class ViewStaff extends Component {
         )
     }
 }
+
+export default (OverDue);
