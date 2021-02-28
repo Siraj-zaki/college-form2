@@ -5,7 +5,7 @@ import { Path } from './Path'
 
 const loginUser = async (email, pass) => {
 
-    let getData = []; let err = '';
+    let getData = [];
 
     let formData = new FormData();
     formData.append('email', email);
@@ -191,113 +191,227 @@ const editUser = async (user) => {
 }
 
 
-const addFriend = async (token, senderID, receiverID) => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const getAllUsers = async (token) => {
     //console.log('runn')
     let getData = []; let err = '';
-    let h = new Headers();
-    h.append('Authorization', token)
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+
+    let req = new Request(Path.getAllUsers, { headers: myHeaders, method: 'GET' })
+
+    await fetch(req)
+        .then(res => res.json())
+        .then((dat) => getData = dat)
+        .catch(err => { alert(err.message); getData = false })
+
+    if (getData?.success === 'false') {
+        alert(getData.message); getData = false
+    }
+    console.log('allusers->', getData)
+    return getData
+
+}
+const addUser = async (token, user) => {
+    //console.log('runn')
+    let getData = []; let err = '';
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+
     var formdata = new FormData();
-    formdata.append("recieverID", receiverID);
-    formdata.append("senderID", senderID);
+    formdata.append("name", user.name);
+    formdata.append("inCode", user.inCde);
+    formdata.append("password", user.password);
+    formdata.append("userName", user.userName);
+    formdata.append("phone", user.phone);
+    formdata.append("gender", user.gender);
+    formdata.append("type", "user");
+    formdata.append("avatar", user.avatar);
+    formdata.append("isActive", "1");
+    formdata.append("email", user.email);
 
-    let req = new Request(Path.sendFriendRequest, { headers: h, body: formdata, method: 'post' })
 
-    await fetch(req)
+    let req = new Request(Path.addUser, { method: 'POST', headers: myHeaders, body: formdata, })
+
+    await fetch(req,)
         .then(res => res.json())
-        .then((dat) => { getData = dat; })
-        .catch(err => { alert("Friend", err.message); getData = false })
-
-    console.log('add friend->', getData)
-    if (getData?.success === 'false') {
-        alert("Friend", getData.message); getData = false
-    }
-
-    return getData
-}
-const getFriendRequest = async (token, uid) => {
-    //console.log('runn')
-    let getData = []; let err = '';
-    let h = new Headers();
-    h.append('Authorization', token)
-    let req = new Request(Path.getFriendRequest + uid, { headers: h, method: 'get' })
-
-    await fetch(req)
-        .then(res => res.json())
-        .then((dat) => { getData = dat; })
-        .catch(err => { alert("Friend", err.message); getData = false })
+        .then((dat) => getData = dat)
+        .catch(err => { alert(err.message); getData = false })
 
     if (getData?.success === 'false') {
-        alert("Friend", getData.message); getData = false
+        alert(getData.message); getData = false
     }
-    console.log('request:' + getData.result.length)
+    console.log('addUser->', getData)
     return getData
-}
-const getFriends = async (token, uid) => {
-    //console.log('runn')
-    let getData = []; let err = '';
-    let h = new Headers();
-    h.append('Authorization', token)
-    let req = new Request(Path.getFriend + uid, { headers: h, method: 'GET' })
 
-    await fetch(req)
+}
+
+const deleteUser = async (token, uid) => {
+    //console.log('runn')
+    let getData = [];
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+
+    let req = new Request(Path.deleteUser + uid, { method: 'DELETE', headers: myHeaders, })
+
+    await fetch(req,)
         .then(res => res.json())
-        .then((dat) => { getData = dat; })
-        .catch(err => { alert("Friend", err.message); getData = false })
+        .then((dat) => getData = dat)
+        .catch(err => { alert(err.message); getData = false })
 
-    // console.log(Platform.Version + ' get friend->', getData)
     if (getData?.success === 'false') {
-        alert("Friend", getData.message); getData = false
+        alert(getData.message); getData = false
     }
-
+    console.log('deleteUser->', getData)
     return getData
+
 }
-const acceptRequest = async (token, uid, rid) => {
+
+
+
+
+const getClass = async (token,) => {
     //console.log('runn')
     let getData = []; let err = '';
-    let h = new Headers();
-    h.append('Authorization', token)
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+
+    let req = new Request(Path.getClass, { method: 'GET', headers: myHeaders, })
+
+    await fetch(req,)
+        .then(res => res.json())
+        .then((dat) => getData = dat)
+        .catch(err => { alert(err.message); getData = false })
+
+    if (getData?.success === 'false') {
+        alert(getData.message); getData = false
+    }
+    console.log('getClass->', getData)
+    return getData
+
+}
+const getStudent = async (token,) => {
+    //console.log('runn')
+    let getData = []; let err = '';
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+
+    let req = new Request(Path.getStudent, { method: 'GET', headers: myHeaders, })
+
+    await fetch(req,)
+        .then(res => res.json())
+        .then((dat) => getData = dat)
+        .catch(err => { alert(err.message); getData = false })
+
+    if (getData?.success === 'false') {
+        alert(getData.message); getData = false
+    }
+    console.log('getStudent->', getData)
+    return getData
+
+}
+
+
+const addClass = async (token, c) => {
+    //console.log('runn')
+    let getData = []; let err = '';
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+
     var formdata = new FormData();
-    formdata.append("userID", uid);
-    formdata.append("friendID", rid);
+    formdata.append("className", c.className);
+    formdata.append("noOfSemester", c.noOfSemester);
+    formdata.append("fee", c.fee);
+    formdata.append("dated", c.dated);
 
-    let req = new Request(Path.acceptRequest, { headers: h, body: formdata, method: 'POST' })
-    await fetch(req)
+    let req = new Request(Path.addClass, { method: 'POST', headers: myHeaders, body: formdata, })
+
+    await fetch(req,)
         .then(res => res.json())
-        .then((dat) => { getData = dat; })
-        .catch(err => { alert("Friend", err.message); getData = false })
+        .then((dat) => getData = dat)
+        .catch(err => { alert(err.message); getData = false })
 
     if (getData?.success === 'false') {
-        alert("Friend", getData.message); getData = false
+        alert(getData.message); getData = false
     }
-
+    console.log('addClass->', getData)
     return getData
+
 }
-const deleteFriendRequest = async (token, rid) => {
+const addStudent = async (token, student) => {
     //console.log('runn')
-    let getData = []; let err = '';
-    let h = new Headers();
-    h.append('Authorization', token)
-    let req = new Request(Path.deleteRequest + rid, { headers: h, method: 'delete' })
+    let getData = [];  
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
 
-    await fetch(req)
+    var formdata = new FormData();
+    formdata.append("firstName", student.firstName)
+    formdata.append("lastName", student.lastName)
+    formdata.append("dateoOfBirth", student.dateoOfBirth)
+    formdata.append("placeOfbirth", student.placeOfbirth)
+    formdata.append("contact", student.contact)
+    formdata.append("bloodGroup", student.bloodGroup)
+    formdata.append("studentCnic", student.studentCnic)
+    formdata.append("phoneNo", student.phoneNo)
+    formdata.append("gender", student.gender)
+    formdata.append("email", student.email)
+    formdata.append("mobileNo1", student.mobileNo1)
+    formdata.append("fax", student.fax)
+    formdata.append("fee", student.fee)
+    formdata.append("fatherCnic", student.fatherCnic)
+    formdata.append("fatherName", student.fatherName)
+    formdata.append("motherName", student.motherName)
+    formdata.append("address", student.address)
+    formdata.append("description", student.description)
+    formdata.append("classID", student.classID)
+    formdata.append("avatar", student.avatar)
+    formdata.append("rollNo", student.rollNo)
+
+    let req = new Request(Path.addStudent, { method: 'POST', headers: myHeaders, body: formdata, })
+
+    await fetch(req,)
         .then(res => res.json())
-        .then((dat) => { getData = dat; })
-        .catch(err => { alert("Friend", err.message); getData = false })
+        .then((dat) => getData = dat)
+        .catch(err => { alert(err.message); getData = false })
 
     if (getData?.success === 'false') {
-        alert("Friend", getData.message); getData = false
+        alert(getData.message); getData = false
     }
-
+    console.log('addStudent->', getData)
     return getData
+
 }
+
 
 
 
 
 
 export default {
-    loginUser, socialLogin, registerUser, checkEmail, sendEmail, setNewPassword, editUser,
+    loginUser, registerUser, checkEmail, sendEmail, setNewPassword, editUser,
 
-    getFriends, addFriend, acceptRequest, getFriendRequest, deleteFriendRequest,
+    getAllUsers, addUser, deleteUser,
+
+    getClass, addClass,
+
+    getStudent, addStudent,
 
 }

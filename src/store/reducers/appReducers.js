@@ -1,17 +1,29 @@
-import { SET_BOTTLE_POWER, SET_BOTTLE_PLAN, SET_REQUESTS, SET_FRIENDS } from '../actions/types'
+import { SET_CLASSES, SET_STUDENTS, SET_USERS } from '../actions/types'
 
 const initialState = {
-    user: false,
+    users: [], classes: [], students: []
 }
 
 const appReducers = (state = initialState, action) => {
     switch (action.type) {
 
-        
-        case SET_FRIENDS:
+
+        case SET_USERS:
             {
                 return {
-                    ...state, friends: action.payload,
+                    ...state, users: action.payload,
+                }
+            }
+        case SET_CLASSES:
+            {
+                return {
+                    ...state, classes: action.payload,
+                }
+            }
+        case SET_STUDENTS:
+            {
+                return {
+                    ...state, students: action.payload,
                 }
             }
 

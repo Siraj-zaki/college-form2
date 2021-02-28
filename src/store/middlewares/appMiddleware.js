@@ -1,28 +1,37 @@
 import api from '../../services/api';
 import { setError, setLoading } from '../actions/globalActions'
-import { setFriends, setRequests } from '../actions/appActions'
+import { setClasses, setStudents, setUsers } from '../actions/appActions'
 
-export const _getRequests = (token, uid) => {
+export const _getAllUsers = (token,) => {
 
     return async (dispatch, getState) => {
 
-        let res = await api.getFriendRequest(token, uid);
+        let res = await api.getAllUsers(token);
         if (res) {
+            dispatch(setUsers(res.result))
+        }
+    }
+}
+export const _getClasses = (token,) => {
 
-            dispatch(setRequests(res.result))
+    return async (dispatch, getState) => {
+
+        let res = await api.getClass(token);
+        if (res) {
+            dispatch(setClasses(res.result))
+        }
+    }
+}
+export const _getStudents = (token,) => {
+
+    return async (dispatch, getState) => {
+
+        let res = await api.getStudent(token);
+        if (res) {
+            dispatch(setStudents(res.result))
         }
     }
 }
 
-export const _getFriends = (token, uid) => {
-
-    return async (dispatch, getState) => {
-
-        let res = await api.getFriends(token, uid);
-        if (res) {
-            dispatch(setFriends(res.result))
-        }
-    }
-}
 
 

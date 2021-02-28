@@ -11,10 +11,10 @@ export const SET_SOCIAL_TOKEN = 'SET_SOCIAL_TOKEN'
 
 
 //app
-export const SET_BOTTLE_POWER = 'SET_BOTTLE_POWER'
-export const SET_BOTTLE_PLAN = 'SET_BOTTLE_PLAN'
-export const SET_REQUESTS = 'SET_REQUESTS'
-export const SET_FRIENDS = 'SET_FRIENDS'
+export const SET_USERS = 'SET_USERS'
+export const SET_CLASSES = 'SET_CLASSES'
+export const SET_STUDENTS = 'SET_STUDENTS'
+ 
 
 
 

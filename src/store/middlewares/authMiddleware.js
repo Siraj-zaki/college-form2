@@ -2,37 +2,22 @@ import api from '../../services/api';
 import { login, setAvatar, updateInfo } from '../actions/authActions'
 import { setLoading, setError } from '../actions/globalActions'
 import jwt_decode from "jwt-decode";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native';
 
-export const _login = (email, pass) => {
+export const _login = (cCode, email, pass) => {
 
     return async (dispatch, getState) => {
         dispatch(setLoading(true))
         let res = await api.loginUser(email, pass);
 
         if (res) {
-            await AsyncStorage.setItem('token', res.token)
-            let info = jwt_decode(res.token)
-            dispatch(login(res.token, info))
+
+            let user = jwt_decode(res.token)
+            user.collegeCode = cCode
+            dispatch(login(res.token, user))
+            return true
         }
-
         dispatch(setLoading(false));
-    }
-}
-export const _socialLogin = (socialID, type) => {
-
-    return async (dispatch, getState) => {
-        dispatch(setLoading(true))
-        let res = await api.socialLogin(socialID, type);
-      
-        if (res) {
-            await AsyncStorage.setItem('token', res.token)
-            let info = jwt_decode(res.token)
-            dispatch(login(res.token, info))
-        }
-
-        dispatch(setLoading(false));
+        return false
     }
 }
 

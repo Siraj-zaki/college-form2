@@ -30,6 +30,6 @@ var firebaseConfig = {
     measurementId: "G-SJSNC8GPV0"
 };
 // Initialize Firebase
-if (firebase.default.apps.length > 0) {
+if (firebase.default.apps.length === 0) {
     firebase.default.initializeApp(firebaseConfig);
 }

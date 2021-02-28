@@ -21,28 +21,18 @@ import store from "../store/store";
 
 class ReactRouter extends React.Component {
 
-  componentDidMount() {
-
-    if (this.props.logged) {
-      return (
-        <Redirect to='/posts' />
-      )
-    }
-    else {
-      return (
-        <Redirect to='/' />
-      )
-    }
-
-  }
+   
 
   render() {
-    // console.log(this.props.logged)
+   
+    
     return (
 
       <React.Fragment>
 
-        <Route exact path="/" component={Login} />
+        <Route exact path="/" component={Login} >
+          {this.props.logged &&    <Redirect to="/posts" />}
+        </Route>
         <Route path="/posts" component={Posts} />
         <Route path="/AddNewStudent" component={AddNewStudent} />
         <Route path="/AddNewServices" component={AddNewServices} />

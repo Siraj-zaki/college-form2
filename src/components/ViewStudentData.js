@@ -3,60 +3,17 @@ import Header from '../header';
 import '../index.css'
 import { Table } from 'react-bootstrap';
 import Loader from 'react-loader-spinner'
+import { connect } from "react-redux";
 
 class ViewStudentData extends Component {
     state = {
-        staffdata: [
-            {
-                FirstName: 'Siraj',
-                password: '123456789',
-                LastName: 'Zaki',
-                gender: 'male',
-                phone: '03137669964',
-                DateOfBirth: 'dd/mm/yyyy',
-                PlaceOfBirth: 'faisalabad',
-                Contact: 'phone no',
-                Rollno: '740',
-                Bloodroup: 'A+',
-                StudentCnic: '1234789',
-                MobileNO1: '03137669964',
-                MobileNO2: '03137669965',
-                Email: 'sirajmuneerfsd1@gmail.com',
-                Fax: '234567890',
-                Nationality: 'Pakistani',
-                FatherCnic: '12356789',
-                Guardian: 'idk',
-                FatherName: 'MuneerAhmed',
-                MotherName: 'asdfghjk',
-                Address: '1234567890-------',
-                Description: 'siraifdkdafafas',
-            },
-            {
-                FirstName: 'Siraj',
-                password: '123456789',
-                LastName: 'Zaki',
-                gender: 'male',
-                phone: '03137669964',
-                DateOfBirth: 'dd/mm/yyyy',
-                PlaceOfBirth: 'faisalabad',
-                Contact: 'phone no',
-                Rollno: '740',
-                Bloodroup: 'A+',
-                StudentCnic: '1234789',
-                MobileNO1: '03137669964',
-                MobileNO2: '03137669965',
-                Email: 'sirajmuneerfsd1@gmail.com',
-                Fax: '234567890',
-                Nationality: 'Pakistani',
-                FatherCnic: '12356789',
-                Guardian: 'idk',
-                FatherName: 'MuneerAhmed',
-                MotherName: 'asdfghjk',
-                Address: '1234567890-------',
-            },
-            
-        ]
+        students: []
     }
+
+    componentDidMount() {
+        this.setState({ students: this.props.students })
+    }
+
 
     render() {
         return (
@@ -79,12 +36,8 @@ class ViewStudentData extends Component {
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
-                                <th>Last Name</th>
-                                <th>Gender</th>
-                                <th>Password</th>
-                                <th>Roll No</th>
-                                <th>Contact</th>
-                                <th>Nationality</th>
+                                <th>Gender</th>  
+                                <th>Roll #</th>
                                 <th>Father Name</th>
                                 <th>Father Cnic</th>
                                 <div style={{ margin: 10 }}>
@@ -103,18 +56,14 @@ class ViewStudentData extends Component {
 
 
                             {
-                                this.state.staffdata.map((e, index) =>
+                                this.state.students.map((student, index) =>
                                     <tr key={index}>
                                         <td>{index + 1}</td>
-                                        <td>{e.FirstName}</td>
-                                        <td>{e.LastName}</td>
-                                        <td>{e.gender}</td>
-                                        <td>{e.password}</td>
-                                        <td>{e.Rollno}</td>
-                                        <td>{e.Contact}</td>
-                                        <td>{e.Nationality}</td>
-                                        <td>{e.FatherName}</td>
-                                        <td>{e.FatherCnic}</td>
+                                        <td>{student.firstName+' '+ student.lastName}</td> 
+                                        <td>{student.gender}</td> 
+                                        <td>{student.rollNo}</td> 
+                                        <td>{student.fatherName}</td>
+                                        <td>{student.fatherCnic}</td>
                                         <div style={{ margin: 10 }}>
                                             <a href="/AddNewStaff">
                                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -142,5 +91,18 @@ class ViewStudentData extends Component {
     }
 }
 
+const mapState = state => {
+    return {
+        token: state.authReducers.token,
+        students: state.appReducers.students,
+    }
+}
+const mapDispatch = dispatch => {
+    return {
 
-export default (ViewStudentData);
+    }
+}
+
+
+
+export default connect(mapState, mapDispatch)(ViewStudentData);

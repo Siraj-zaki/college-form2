@@ -1,27 +1,21 @@
-import { SET_BOTTLE_POWER, SET_BOTTLE_PLAN, SET_REQUESTS, SET_FRIENDS } from './types';
+import { SET_STUDENTS, SET_USERS, SET_CLASSES } from './types';
 
 
-export const setBottleWater = (payload) => (
+export const setUsers = (payload) => (
     {
-        type: SET_BOTTLE_POWER,
+        type: SET_USERS,
         payload
     }
 )
-export const setBottlePlan = (payload) => (
+export const setClasses = (payload) => (
     {
-        type: SET_BOTTLE_PLAN,
+        type: SET_CLASSES,
         payload
     }
 )
-export const setRequests = (payload) => (
+export const setStudents = (payload) => (
     {
-        type: SET_REQUESTS,
-        payload
-    }
-)
-export const setFriends = (payload) => (
-    {
-        type: SET_FRIENDS,
+        type: SET_STUDENTS,
         payload
     }
 )

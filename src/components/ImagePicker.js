@@ -15,11 +15,14 @@ export default class ImageUpload extends React.Component {
   }
 
   _handleImageChange(e) {
+    if (e.target.files[0] == undefined) {
+      return
+    }
     e.preventDefault();
 
     let reader = new FileReader();
     let file = e.target.files[0];
-
+    this.props.getFile(file)
     reader.onloadend = () => {
       this.setState({
         file: file,
@@ -39,10 +42,10 @@ export default class ImageUpload extends React.Component {
     }
 
     return (
-      <div className="previewComponent hide-on-print" style={{right:this.props.new ? "5%" : null}}>
+      <div className="previewComponent hide-on-print" style={{ right: this.props.new ? "5%" : null }}>
         <form onSubmit={(e) => this._handleSubmit(e)}>
           <input className="fileInput" id="imagepicker"
-            type="file"
+            type="file" required
             onChange={(e) => this._handleImageChange(e)} />
         </form>
         <label htmlFor="imagepicker" className="labelimage">

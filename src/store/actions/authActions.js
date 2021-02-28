@@ -27,12 +27,7 @@ export const setAvatar = (val) => (
         val: val
     }
 )
-export const setSocialToken = (val) => (
-    {
-        type: SET_SOCIAL_TOKEN,
-        val: val
-    }
-)
+ 
 export const setLogged = (payload) => (
     {
         type: SET_LOGGED,

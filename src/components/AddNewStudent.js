@@ -5,33 +5,31 @@ import logo from '../assets/logo.png'
 import moment from 'moment';
 import HBL from '../assets/Capture.PNG'
 import '../index.css'
+import { _getStudents } from "../store/middlewares/appMiddleware";
+import { connect } from "react-redux";
+import api from "../services/api";
+import * as firebase from 'firebase'
 
- class AddNewStudent extends Component {
+class AddNewStudent extends Component {
   state = {
-
-    firstname: '',
-    lastname: '',
-    dateofbirth: '',
-    placeofbirth: '',
+    allClasses: [],
+    gender: 'Male',
+    bloodGroup: 'A+',
+    avatar: "",
+    placeOfbirth: '',
     contact: '',
-    rollno: '',
-    bloodgroup: '',
-    studentcnic: '',
-    phoneno: '',
-    gender: '',
-    mobileno1: '',
-    mobileno2: '',
-    email: '',
-    fax: '',
-    nationality: '',
-    fee: 9000,
-    fathercnic: '',
-    guardian: '',
-    fathername: '',
-    mothername: '',
-    address: '',
-    description: '',
-    class: '',
+    phoneNo: '',
+    mobileNo1: '',
+    address:'',
+    description:'',
+  }
+
+  async componentDidMount() {
+    let res = await api.getClass(this.props.token)
+    if (res) {
+      this.setState({ allClasses: res.result, classID: res.result[0].classID })
+    }
+
   }
 
 
@@ -46,8 +44,52 @@ import '../index.css'
   handleChange(evt, name) {
     this.setState({ [name]: evt.target.value });
   }
+
+  uploadHandler = (e) => {
+    e.preventDefault();
+
+    if (!this.state.avatar) {
+      return alert('Image is required')
+    }
+    if (!this.state.gender) {
+      return alert('Gender is required')
+    }
+
+    let file = this.state.avatar
+    let name = this.state.rollNo + '_' + this.state.firstName + '_' + this.state.lastName + '_' + new Date().toISOString()
+    let dir = 'student'
+    let t = this;
+    const uploadTask = firebase.default.storage().ref(dir + '/' + name).put(file)
+    uploadTask.on('state_changed', function (snapshot) {
+      var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      // setProgress(progress)
+    }, function (error) {
+      return alert(JSON.stringify(error))
+      // Handle unsuccessful uploads
+    }, function () {
+      // Handle successful uploads on complete
+      // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+      firebase.default.storage().ref(dir).child(name).getDownloadURL()
+        .then(url => {
+          t.finishAddStudent(url)
+        })
+    });
+
+
+  }
+
+
+  finishAddStudent = async (url) => {
+    await this.setState({ avatar: url })
+    let res = await api.addStudent(this.props.token, this.state)
+    if (res) {
+      alert('Student added Sucessfullly')
+      await this.props._getStudents(this.props.token)
+    }
+  }
+
   render() {
-    console.log(this.state);
+
     return (
       <div className='admin-page add-new-student'>
         <Header />
@@ -55,27 +97,27 @@ import '../index.css'
           <h1>ADMISSION FORM</h1>
         </div>
         <hr />
-        <form className="hide-on-print">
+        <form className="hide-on-print" onSubmit={this.uploadHandler} >
           <div className="form-row hide-on-print">
             <div class="form-group col-md-3">
               <label for="first-name">First Name *</label>
-              <input onChange={(event) => this.handleChange(event, "firstname")} value={this.state.firstname} type="text" class="form-control form-control-sm" id="first-name" placeholder="First Name"></input>
+              <input onChange={(event) => this.handleChange(event, "firstName")} required value={this.state.firstName} type="text" class="form-control form-control-sm" id="first-name" placeholder="First Name"></input>
             </div>
             <div class="form-group col-md-3">
               <label for="last-name">Last Name *</label>
-              <input onChange={(event) => this.handleChange(event, "lastname")} value={this.state.lastname} type="text" class="form-control form-control-sm" id="last-name" placeholder="Last Name"></input>
+              <input required onChange={(event) => this.handleChange(event, "lastName")} value={this.state.lastName} type="text" class="form-control form-control-sm" id="last-name" placeholder="Last Name"></input>
             </div>
 
           </div>
-          <ImageUpload />
+          <ImageUpload getFile={file => this.setState({ avatar: file })} />
           <div className="form-row">
             <div class="form-group col-md-3">
               <label for="date-of-birth">Date Of Birth </label>
-              <input onChange={(event) => this.handleChange(event, "dateofbirth")} value={this.state.dateofbirth} type="date" class="form-control form-control-sm" id="date-of-birth"></input>
+              <input required onChange={(event) => this.handleChange(event, "dateoOfBirth")} value={this.state.dateofbirth} type="date" class="form-control form-control-sm" id="date-of-birth"></input>
             </div>
             <div class="form-group col-md-3">
               <label for="place-of-birth">Place Of Birth </label>
-              <input onChange={(event) => this.handleChange(event, "placeofbirth")} value={this.state.placeofbirth} type="text" class="form-control form-control-sm" id="place-of-birth" placeholder="Place Of Birth"></input>
+              <input onChange={(event) => this.handleChange(event, "placeOfbirth")} value={this.state.placeofbirth} type="text" class="form-control form-control-sm" id="place-of-birth" placeholder="Place Of Birth"></input>
             </div>
           </div>
           <div className="form-row">
@@ -85,27 +127,35 @@ import '../index.css'
             </div>
             <div class="form-group col-md-2">
               <label for="rollno">Roll No *</label>
-              <input onChange={(event) => this.handleChange(event, "rollno")} value={this.state.rollno} type="number" class="form-control form-control-sm" id="rollno" placeholder="Roll No"></input>
+              <input required onChange={(event) => this.handleChange(event, "rollNo")} value={this.state.rollno} type="number" class="form-control form-control-sm" id="rollno" placeholder="Roll No"></input>
             </div>
             <div class="form-group col-md-2">
               <label for="rollno">Class *</label>
-              <input onChange={(event) => this.handleChange(event, "class")} value={this.state.rollno} type="text" class="form-control form-control-sm" id="rollno" placeholder="Class"></input>
+              <select required onChange={(event) => this.handleChange(event, "classID")} value={this.state.gender} class="custom-select custom-select-sm" id="gender">
+
+                {
+                  this.state.allClasses.map((c, index) =>
+                    <option value={c.classID}  >{c.className}</option>
+                  )
+                }
+
+              </select>
             </div>
           </div>
           <div className="form-row">
 
             <div class="form-group col-md-3">
-              <label for="student-cnic">Student CNIC </label>
-              <input onChange={(event) => this.handleChange(event, "studentcnic")} value={this.state.studentcnic} type="text" class="form-control form-control-sm" id="student-cnic" placeholder="Student CNIC"></input>
+              <label for="student-cnic">Student CNIC *</label>
+              <input required onChange={(event) => this.handleChange(event, "studentCnic")} value={this.state.studentcnic} type="text" class="form-control form-control-sm" id="student-cnic" placeholder="Student CNIC"></input>
             </div>
             <div class="form-group col-md-3">
               <label for="phone">Phone No </label>
-              <input onChange={(event) => this.handleChange(event, "phoneno")} value={this.state.phoneno} type="number" class="form-control form-control-sm" id="phone" placeholder="Phone No"></input>
+              <input onChange={(event) => this.handleChange(event, "phoneNo")} value={this.state.phoneno} type="number" class="form-control form-control-sm" id="phone" placeholder="Phone No"></input>
             </div>
             <div class="form-group col-md-3 custom-select-sm">
-              <label for="gender">Gender</label><br />
-              <select onChange={(event) => this.handleChange(event, "gender")} value={this.state.gender} class="custom-select custom-select-sm" id="gender">
-                <option selected>Select Your Gender</option>
+              <label for="gender">Gender *</label><br />
+              <select required onChange={(event) => this.handleChange(event, "gender")} value={this.state.gender} class="custom-select custom-select-sm" id="gender">
+
                 <option value="1">Male</option>
                 <option value="2">Female</option>
                 <option value="3">Other</option>
@@ -115,24 +165,21 @@ import '../index.css'
           <div className="form-row">
             <div class="form-group col-md-3">
               <label for="Mobile-1">Mobile 1 </label>
-              <input onChange={(event) => this.handleChange(event, "mobileno1")} value={this.state.mobileno1} type="number" class="form-control form-control-sm" id="Mobile-1" placeholder="Mobile 1"></input>
+              <input onChange={(event) => this.handleChange(event, "mobileNo1")} value={this.state.mobileno1} type="number" class="form-control form-control-sm" id="Mobile-1" placeholder="Mobile 1"></input>
             </div>
-            <div class="form-group col-md-3">
+            {/* <div class="form-group col-md-3">
               <label for="Mobile-2">Mobile 2 </label>
               <input onChange={(event) => this.handleChange(event, "mobileno2")} value={this.state.mobileno2} type="number" class="form-control form-control-sm" id="Mobile-2" placeholder="Mobile 2"></input>
-            </div>
+            </div> */}
             <div class="form-group col-md-3">
               <label for="email-2">Email *</label>
-              <input onChange={(event) => this.handleChange(event, "email")} value={this.state.email} type="email" class="form-control form-control-sm" id="email-2" placeholder="Email"></input>
+              <input required onChange={(event) => this.handleChange(event, "email")} value={this.state.email} type="email" class="form-control form-control-sm" id="email-2" placeholder="Email"></input>
             </div>
             <div class="form-group col-md-3">
               <label for="fax">Fax</label>
               <input onChange={(event) => this.handleChange(event, "fax")} value={this.state.fax} type="text" class="form-control form-control-sm" id="fax" placeholder="Fax"></input>
             </div>
-            <div class="form-group col-md-3">
-              <label for="Nationality">Nationality </label>
-              <input onChange={(event) => this.handleChange(event, "nationality")} value={this.state.nationality} type="text" class="form-control form-control-sm" id="Nationality" placeholder="Nationality"></input>
-            </div>
+
             <div class="form-group col-md-3">
               <label for="Nationality">Fee </label>
               <input onChange={(event) => this.handleChange(event, "fee")} value={this.state.fee} type="number" class="form-control form-control-sm" id="Nationality" placeholder="Fee"></input>
@@ -141,23 +188,34 @@ import '../index.css'
           <div class="form-row">
             <div class="form-group col-md-3">
               <label for="icnic-1">Father CNIC *</label>
-              <input onChange={(event) => this.handleChange(event, "fathercnic")} value={this.state.fathercnic} type="text" class="form-control form-control-sm" id="cnic-1" placeholder="CNIC" required></input>
+              <input required onChange={(event) => this.handleChange(event, "fatherCnic")} value={this.state.fathercnic} type="text" class="form-control form-control-sm" id="cnic-1" placeholder="CNIC" ></input>
             </div>
             <div class="form-group col-md-3">
-              <label for="Guardian">Guardian</label>
-              <input onChange={(event) => this.handleChange(event, "guardain")} value={this.state.guardian} type="text" class="form-control form-control-sm" id="Guardian" placeholder="Guardian"></input>
+              <label for="Guardian">Guardian *</label>
+              <input required onChange={(event) => this.handleChange(event, "guardain")} value={this.state.guardian} type="text" class="form-control form-control-sm" id="Guardian" placeholder="Guardian"></input>
             </div>
             <div class="form-group col-md-3">
               <label for="fathername">Father Name *</label>
-              <input onChange={(event) => this.handleChange(event, "fathername")} value={this.state.fathercnic} type="text" class="form-control form-control-sm" id="fathername" placeholder="Father Name" required></input>
+              <input required onChange={(event) => this.handleChange(event, "fatherName")} value={this.state.fathercnic} type="text" class="form-control form-control-sm" id="fathername" placeholder="Father Name" ></input>
             </div>
             <div class="form-group col-md-3">
               <label for="mothername">Mother Name</label>
-              <input onChange={(event) => this.handleChange(event, "mothername")} value={this.state.mothername} type="text" class="form-control form-control-sm" id="mothername" placeholder="Mother Name"></input>
+              <input onChange={(event) => this.handleChange(event, "motherName")} value={this.state.mothername} type="text" class="form-control form-control-sm" id="mothername" placeholder="Mother Name"></input>
             </div>
             <div class="form-group col-md-3">
-              <label for="blood-group">Blood Group </label>
-              <input onChange={(event) => this.handleChange(event, "bloodgroup")} value={this.state.bloodgroup} type="text" class="form-control form-control-sm" id="blood-group" placeholder="Blood Group"></input>
+              <label for="blood-group">Blood Group</label>
+              <select required onChange={(event) => this.handleChange(event, "bloodGroup")} value={this.state.gender} class="custom-select custom-select-sm" id="gender">
+
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+
+              </select>
             </div>
           </div>
           <div class="form-row">
@@ -172,7 +230,7 @@ import '../index.css'
               <textarea onChange={(event) => this.handleChange(event, "description")} value={this.state.description} class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
             </div>
           </div>
-          <button onClick={() => window.print()} class="btn btn-primary" style={{ marginBottom: '50px' }}>Print</button>
+          <button type='submit' class="btn btn-primary" style={{ marginBottom: '50px' }}>Add Student</button>
         </form>
         <div className="show-on-print" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
 
@@ -760,6 +818,16 @@ import '../index.css'
     )
   }
 }
+const mapState = state => {
+  return {
+    token: state.authReducers.token
+  }
+}
+const mapDispatch = dispatch => {
+  return {
+    _getStudents: token => dispatch(_getStudents(token)),
+  }
+}
 
 
-export default (AddNewStudent);
+export default connect(mapState, mapDispatch)(AddNewStudent);
