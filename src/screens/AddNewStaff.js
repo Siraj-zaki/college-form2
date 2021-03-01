@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import Header from '../header';
-import ImageUpload from './ImagePicker'
+import ImageUpload from '../components/ImagePicker'
 import '../index.css'
-import Loader from 'react-loader-spinner'
-
 import * as firebase from 'firebase'
 import { connect } from "react-redux";
 import { _getAllUsers } from "../store/middlewares/appMiddleware";
 import api from "../services/api";
+import { ProgressBar } from "react-bootstrap";
+import { setLoading } from "../store/actions/globalActions";
+import { Loading } from "../components/Icons";
 
 class AddNewStaff extends Component {
 
@@ -20,11 +21,13 @@ class AddNewStaff extends Component {
         gender: "",
         avatar: '',
         email: '',
-
+        progress: 0
     }
 
     uploadHandler = (e) => {
         e.preventDefault();
+        if (this.props.loading)
+            return;
 
         if (!this.state.avatar) {
             return alert('Image is required')
@@ -32,7 +35,7 @@ class AddNewStaff extends Component {
         if (!this.state.gender) {
             return alert('Gender is required')
         }
-
+        this.props.setLoading(true)
         let file = this.state.avatar
         let name = this.state.username + new Date().toISOString()
         let dir = 'staff'
@@ -69,25 +72,26 @@ class AddNewStaff extends Component {
 
         }
 
+
         let res = await api.addUser(this.props.token, user);
         if (res) {
             alert('Added Successfully')
             await this.props._getAllUsers(this.props.token)
             window.history.back()
         }
+        this.setState({ progress: 0 })
+        this.props.setLoading(false)
     }
 
 
 
     render() {
 
-        
         return (
-
             <div className='admin-page add-new-student'>
                 <Header />
                 <div className='admin-heading'>
-
+                    <ProgressBar variant='success' now={this.state.progress} style={{ width: '100%', zIndex: 100, left: 0, height: 8, position: 'fixed', top: 0, opacity: this.state.progress }} />
                     <h2>Add New Staff</h2>
                 </div>
                 <hr />
@@ -141,7 +145,14 @@ class AddNewStaff extends Component {
                     </div>
 
                     {/* <button type="submit" class="btn btn-primary margin-top">Sign in</button> */}
-                    <button type="submit" class="btn btn-primary margin-top hide-on-print"   >Add Staff</button>
+                    <button type="submit" class="btn btn-primary margin-top hide-on-print" style={{ height: 50, width: 200 }}  >
+                        {
+                            this.props.loading ?
+                                <Loading size={30} color='#fff' />
+                                :
+                                'Add Staff'
+                        }
+                    </button>
                 </form>
 
             </div>
@@ -153,11 +164,13 @@ class AddNewStaff extends Component {
 const mapState = state => {
     return {
         token: state.authReducers.token,
+        loading: state.globalReducers.loading
     }
 }
 const mapDispatch = dispatch => {
     return {
-        _getAllUsers: token => dispatch(_getAllUsers(token))
+        _getAllUsers: token => dispatch(_getAllUsers(token)),
+        setLoading: bol => dispatch(setLoading(bol))
     }
 }
 

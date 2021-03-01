@@ -6,26 +6,31 @@ import Loader from 'react-loader-spinner'
 import pic from '../assets/img.jpg'
 import { connect } from "react-redux";
 import api from "../services/api";
+import ConfirmModal from '../components/ConfirmModal'
 
 class ViewStaff extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            users: []
+            users: [],
+            showModal: false,
+            deleteID: '',
         }
     }
     componentDidMount() {
         this.setState({ users: this.props.users })
     }
 
-    deleteHandler =async (uid) => {
-        let res = await api.deleteUser(this.props.token, uid)
+    deleteHandler = async () => {
+
+        let res = await api.deleteUser(this.props.token, this.state.deleteID)
         if (res) {
             alert("Deleted Successfully")
-            let users = this.state.users.filter((item) => item.userID !== uid)
+            let users = this.state.users.filter((item) => item.userID !== this.state.deleteID)
             this.setState({ users })
         }
+        this.setState({ showModal: false })
     }
 
 
@@ -82,7 +87,7 @@ class ViewStaff extends Component {
                                         <td>{user.gender}</td>
                                         <td><img src={user.avatar || pic} className="staffpic" alt="" /></td>
                                         <div style={{ margin: 10 }}>
-                                            <a onClick={() => this.deleteHandler(user.userID)}>
+                                            <a onClick={() => this.setState({ showModal: true, deleteID: user.userID })}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-person-x-fill" viewBox="0 0 16 16">
                                                     <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6.146-2.854a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z" />
                                                 </svg>
@@ -98,7 +103,10 @@ class ViewStaff extends Component {
                     </Table>
 
                 </div>
-
+                {
+                    this.state.showModal &&
+                    <ConfirmModal onCancelClick={() => this.setState({ showModal: false })} onDoClick={this.deleteHandler} />
+                }
 
 
             </div>

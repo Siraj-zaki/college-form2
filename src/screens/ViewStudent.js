@@ -50,13 +50,13 @@ class ViewStudent extends Component {
 
 
                             {
-                                this.props.students.map((e, index) =>
+                                this.props.students.map((student, index) =>
                                     <tr key={index}>
                                         <td>{index + 1}</td>
-                                        <td>{e.FirstName + e.LastName}</td>
-                                        <td>{e.Rollno}</td>
-                                        <td>{e.FatherName}</td>
-                                        <td><img src={e.img} className="staffpic" alt="" /></td>
+                                        <td>{student.firstName + student.lastName}</td>
+                                        <td>{student.rollNo}</td>
+                                        <td>{student.fatherName}</td>
+                                        <td><img src={ student.avatar} className="staffpic" alt="" /></td>
                                         <div style={{ margin: 10 }}>
                                             <a href="/AddNewStaff">
                                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

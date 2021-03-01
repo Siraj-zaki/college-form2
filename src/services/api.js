@@ -357,18 +357,20 @@ const addClass = async (token, c) => {
 
 }
 const addStudent = async (token, student) => {
-    //console.log('runn')
-    let getData = [];  
+
+    let getData = [];
     var myHeaders = new Headers();
     myHeaders.append("Authorization", token);
+
+    console.log(student.contact, student.placeOfbirth)
 
     var formdata = new FormData();
     formdata.append("firstName", student.firstName)
     formdata.append("lastName", student.lastName)
     formdata.append("dateoOfBirth", student.dateoOfBirth)
-    formdata.append("placeOfbirth", student.placeOfbirth)
-    formdata.append("contact", student.contact)
-    formdata.append("bloodGroup", student.bloodGroup)
+    formdata.append("placeOfbirth", student.placeOfbirth);
+    formdata.append("contact", student.contact);
+    formdata.append("bloodGroup", student.bloodGroup);
     formdata.append("studentCnic", student.studentCnic)
     formdata.append("phoneNo", student.phoneNo)
     formdata.append("gender", student.gender)
@@ -384,18 +386,19 @@ const addStudent = async (token, student) => {
     formdata.append("classID", student.classID)
     formdata.append("avatar", student.avatar)
     formdata.append("rollNo", student.rollNo)
+ 
 
     let req = new Request(Path.addStudent, { method: 'POST', headers: myHeaders, body: formdata, })
 
-    await fetch(req,)
+    await fetch(req)
         .then(res => res.json())
-        .then((dat) => getData = dat)
+        .then(dat => getData = dat)
         .catch(err => { alert(err.message); getData = false })
 
+    console.log('addStudent->', getData)
     if (getData?.success === 'false') {
         alert(getData.message); getData = false
     }
-    console.log('addStudent->', getData)
     return getData
 
 }

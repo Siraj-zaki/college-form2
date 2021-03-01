@@ -9,19 +9,34 @@ import { _getStudents } from "../store/middlewares/appMiddleware";
 import { connect } from "react-redux";
 import api from "../services/api";
 import * as firebase from 'firebase'
+import { Loading } from "../components/Icons";
+import { ProgressBar } from 'react-bootstrap'
+import { setLoading } from "../store/actions/globalActions";
 
 class AddNewStudent extends Component {
   state = {
     allClasses: [],
-    gender: 'Male',
+    firstName: '',
+    lastName: '',
+    dateoOfBirth: '',
+    placeOfbirth: '',
     bloodGroup: 'A+',
-    avatar: "",
+    studentCnic: '',
+    gender: 'Male',
+    avatar: '',
     placeOfbirth: '',
     contact: '',
     phoneNo: '',
     mobileNo1: '',
-    address:'',
-    description:'',
+    fax: '', fee: '',
+    description: '',
+    progress: 0,
+    fatherCnic: '', guardain: '', fatherName: '',
+    motherName: '',
+    address: '',
+
+    email: '',
+    rollNo: '',
   }
 
   async componentDidMount() {
@@ -31,16 +46,7 @@ class AddNewStudent extends Component {
     }
 
   }
-
-
-  // handleChange(e) {
-  //   const value = e.target.value;
-  //   console.log(e.target.name);
-  //   this.setState({
-  //     ...this.state,
-  //     [e.target.name]: value
-  //   });
-  // }
+ 
   handleChange(evt, name) {
     this.setState({ [name]: evt.target.value });
   }
@@ -51,18 +57,22 @@ class AddNewStudent extends Component {
     if (!this.state.avatar) {
       return alert('Image is required')
     }
+    if (this.state.avatar.url) {
+      return this.finishAddStudent(this.state.avatar.url)
+    }
     if (!this.state.gender) {
       return alert('Gender is required')
     }
-
-    let file = this.state.avatar
+    this.props.setLoading(true)
+    let file = this.state.avatar.file
     let name = this.state.rollNo + '_' + this.state.firstName + '_' + this.state.lastName + '_' + new Date().toISOString()
     let dir = 'student'
     let t = this;
     const uploadTask = firebase.default.storage().ref(dir + '/' + name).put(file)
     uploadTask.on('state_changed', function (snapshot) {
       var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      // setProgress(progress)
+
+      t.setState({ progress })
     }, function (error) {
       return alert(JSON.stringify(error))
       // Handle unsuccessful uploads
@@ -71,6 +81,9 @@ class AddNewStudent extends Component {
       // For instance, get the download URL: https://firebasestorage.googleapis.com/...
       firebase.default.storage().ref(dir).child(name).getDownloadURL()
         .then(url => {
+          let obj = t.state.avatar;
+          obj.url = url
+          t.setState({ avatar: obj })
           t.finishAddStudent(url)
         })
     });
@@ -80,12 +93,26 @@ class AddNewStudent extends Component {
 
 
   finishAddStudent = async (url) => {
-    await this.setState({ avatar: url })
+    let avatarObj = this.state.avatar;
+    await this.setState({ avatar: url, progress: 0 })
     let res = await api.addStudent(this.props.token, this.state)
     if (res) {
       alert('Student added Sucessfullly')
       await this.props._getStudents(this.props.token)
     }
+    else {
+      this.setState({ avatar: avatarObj })
+    }
+    this.props.setLoading(false)
+  }
+
+  imageHandler = (file) => {
+    let avatar = {
+      file: file,
+      url: '',
+    }
+    this.setState({ avatar })
+
   }
 
   render() {
@@ -94,6 +121,8 @@ class AddNewStudent extends Component {
       <div className='admin-page add-new-student'>
         <Header />
         <div className='admin-heading hide-on-print'>
+          <ProgressBar variant='success' now={this.state.progress} style={{ width: '100%', zIndex: 100, left: 0, height: 8, position: 'fixed', top: 0, opacity: this.state.progress }} />
+
           <h1>ADMISSION FORM</h1>
         </div>
         <hr />
@@ -109,28 +138,28 @@ class AddNewStudent extends Component {
             </div>
 
           </div>
-          <ImageUpload getFile={file => this.setState({ avatar: file })} />
+          <ImageUpload getFile={file => this.imageHandler(file)} />
           <div className="form-row">
             <div class="form-group col-md-3">
               <label for="date-of-birth">Date Of Birth </label>
-              <input required onChange={(event) => this.handleChange(event, "dateoOfBirth")} value={this.state.dateofbirth} type="date" class="form-control form-control-sm" id="date-of-birth"></input>
+              <input required onChange={(event) => this.handleChange(event, "dateoOfBirth")} value={this.state.dateoOfBirth} type="date" class="form-control form-control-sm" id="date-of-birth"></input>
             </div>
             <div class="form-group col-md-3">
               <label for="place-of-birth">Place Of Birth </label>
-              <input onChange={(event) => this.handleChange(event, "placeOfbirth")} value={this.state.placeofbirth} type="text" class="form-control form-control-sm" id="place-of-birth" placeholder="Place Of Birth"></input>
+              <input required onChange={(event) => this.handleChange(event, "placeOfbirth")} value={this.state.placeOfbirth} type="text" class="form-control form-control-sm" id="place-of-birth" placeholder="Place Of Birth"></input>
             </div>
           </div>
           <div className="form-row">
             <div class="form-group col-md-3">
               <label for="Contact">Contact</label>
-              <input onChange={(event) => this.handleChange(event, "contact")} value={this.state.contact} type="number" class="form-control form-control-sm" id="Contact" placeholder="Contact"></input>
+              <input required onChange={(event) => this.handleChange(event, "contact")} value={this.state.contact} type="number" class="form-control form-control-sm" id="Contact" placeholder="Contact"></input>
             </div>
             <div class="form-group col-md-2">
               <label for="rollno">Roll No *</label>
-              <input required onChange={(event) => this.handleChange(event, "rollNo")} value={this.state.rollno} type="number" class="form-control form-control-sm" id="rollno" placeholder="Roll No"></input>
+              <input required onChange={(event) => this.handleChange(event, "rollNo")} value={this.state.rollNo} type="number" class="form-control form-control-sm" id="rollno" placeholder="Roll No"></input>
             </div>
             <div class="form-group col-md-2">
-              <label for="rollno">Class *</label>
+              <label for="rollno">Class</label>
               <select required onChange={(event) => this.handleChange(event, "classID")} value={this.state.gender} class="custom-select custom-select-sm" id="gender">
 
                 {
@@ -146,14 +175,14 @@ class AddNewStudent extends Component {
 
             <div class="form-group col-md-3">
               <label for="student-cnic">Student CNIC *</label>
-              <input required onChange={(event) => this.handleChange(event, "studentCnic")} value={this.state.studentcnic} type="text" class="form-control form-control-sm" id="student-cnic" placeholder="Student CNIC"></input>
+              <input required onChange={(event) => this.handleChange(event, "studentCnic")} value={this.state.studentCnic} type="text" class="form-control form-control-sm" id="student-cnic" placeholder="Student CNIC"></input>
             </div>
             <div class="form-group col-md-3">
               <label for="phone">Phone No </label>
               <input onChange={(event) => this.handleChange(event, "phoneNo")} value={this.state.phoneno} type="number" class="form-control form-control-sm" id="phone" placeholder="Phone No"></input>
             </div>
             <div class="form-group col-md-3 custom-select-sm">
-              <label for="gender">Gender *</label><br />
+              <label for="gender">Gender</label><br />
               <select required onChange={(event) => this.handleChange(event, "gender")} value={this.state.gender} class="custom-select custom-select-sm" id="gender">
 
                 <option value="1">Male</option>
@@ -188,15 +217,15 @@ class AddNewStudent extends Component {
           <div class="form-row">
             <div class="form-group col-md-3">
               <label for="icnic-1">Father CNIC *</label>
-              <input required onChange={(event) => this.handleChange(event, "fatherCnic")} value={this.state.fathercnic} type="text" class="form-control form-control-sm" id="cnic-1" placeholder="CNIC" ></input>
+              <input required onChange={(event) => this.handleChange(event, "fatherCnic")} value={this.state.fatherCnic} type="text" class="form-control form-control-sm" id="cnic-1" placeholder="CNIC" ></input>
             </div>
             <div class="form-group col-md-3">
-              <label for="Guardian">Guardian *</label>
-              <input required onChange={(event) => this.handleChange(event, "guardain")} value={this.state.guardian} type="text" class="form-control form-control-sm" id="Guardian" placeholder="Guardian"></input>
+              <label for="Guardian">Guardian</label>
+              <input onChange={(event) => this.handleChange(event, "guardain")} value={this.state.guardian} type="text" class="form-control form-control-sm" id="Guardian" placeholder="Guardian"></input>
             </div>
             <div class="form-group col-md-3">
               <label for="fathername">Father Name *</label>
-              <input required onChange={(event) => this.handleChange(event, "fatherName")} value={this.state.fathercnic} type="text" class="form-control form-control-sm" id="fathername" placeholder="Father Name" ></input>
+              <input required onChange={(event) => this.handleChange(event, "fatherName")} value={this.state.fatherName} type="text" class="form-control form-control-sm" id="fathername" placeholder="Father Name" ></input>
             </div>
             <div class="form-group col-md-3">
               <label for="mothername">Mother Name</label>
@@ -230,7 +259,15 @@ class AddNewStudent extends Component {
               <textarea onChange={(event) => this.handleChange(event, "description")} value={this.state.description} class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
             </div>
           </div>
-          <button type='submit' class="btn btn-primary" style={{ marginBottom: '50px' }}>Add Student</button>
+          <button type='submit' class="btn btn-primary" style={{ marginBottom: '50px', width: 200, height: 50 }}>
+            {
+              this.props.loading ?
+                <Loading size={30} color='#fff' />
+                :
+                'Add Student'
+            }
+
+          </button>
         </form>
         <div className="show-on-print" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
 
@@ -820,12 +857,14 @@ class AddNewStudent extends Component {
 }
 const mapState = state => {
   return {
-    token: state.authReducers.token
+    token: state.authReducers.token,
+    loading: state.globalReducers.loading
   }
 }
 const mapDispatch = dispatch => {
   return {
     _getStudents: token => dispatch(_getStudents(token)),
+    setLoading: bol => dispatch(setLoading(bol)),
   }
 }
 

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import Header from '../header';
-import ImageUpload from './ImagePicker';
+import Header from '../header'; 
 import '../index.css'
 
 class ClassForm extends Component {

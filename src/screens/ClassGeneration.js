@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import Header from '../header';
-import ImageUpload from './ImagePicker';
+import Header from '../header'; 
 import '../index.css'
 import { connect } from "react-redux";
 import api from "../services/api";
