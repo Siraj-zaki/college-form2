@@ -26,7 +26,7 @@ const loginUser = async (email, pass) => {
     return getData
 
 }
- 
+
 const registerUser = async (user) => {
     let err = ''; let getData = []
 
@@ -181,7 +181,7 @@ const editUser = async (user) => {
 
 const getStaffByCode = async (token, code) => {
     //console.log('runn')
-    let getData = [];  
+    let getData = [];
 
     var myHeaders = new Headers();
     myHeaders.append("Authorization", token);
@@ -373,13 +373,13 @@ const addStudent = async (token, student) => {
 
 }
 
-const getServices = async (token, code) => {
+const getServicesbyCode = async (token, code) => {
     //console.log('runn')
     let getData = [];
     var myHeaders = new Headers();
     myHeaders.append("Authorization", token);
 
-    let req = new Request(Path.getStudentByCode + code, { method: 'GET', headers: myHeaders, })
+    let req = new Request(Path.getServiceByCode + code, { method: 'GET', headers: myHeaders, })
 
     await fetch(req,)
         .then(res => res.json())
@@ -389,7 +389,34 @@ const getServices = async (token, code) => {
     if (getData?.success === 'false') {
         alert(getData.message); getData = false
     }
-    console.log('getStudent->', getData)
+    console.log('getService->', getData)
+    return getData
+
+}
+const addService = async (token, service) => {
+    //console.log('runn')
+    let getData = [];
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+
+    var formdata = new FormData();
+    formdata.append("serviceName", service.name);
+    formdata.append("serviceDescription", service.discription);
+    formdata.append("serviceAmmount", service.ammount);
+    formdata.append("serInCode", service.inCode);
+
+
+    let req = new Request(Path.addService, { method: 'POST', headers: myHeaders, body: formdata })
+
+    await fetch(req,)
+        .then(res => res.json())
+        .then((dat) => getData = dat)
+        .catch(err => { alert(err.message); getData = false })
+
+    if (getData?.success === 'false') {
+        alert(getData.message); getData = false
+    }
+    console.log('addService->', getData)
     return getData
 
 }
@@ -407,5 +434,7 @@ export default {
     getClass, addClass,
 
     getStudentByCode, addStudent,
+
+    addService, getServicesbyCode,
 
 }

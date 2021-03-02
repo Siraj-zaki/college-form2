@@ -1,7 +1,7 @@
-import { SET_CLASSES, SET_STUDENTS, SET_USERS } from '../actions/types'
+import { SET_CLASSES, SET_STUDENTS, SET_USERS,SET_SERVICES } from '../actions/types'
 
 const initialState = {
-    users: [], classes: [], students: []
+    users: [], classes: [], students: [], services: [],
 }
 
 const appReducers = (state = initialState, action) => {
@@ -24,6 +24,12 @@ const appReducers = (state = initialState, action) => {
             {
                 return {
                     ...state, students: action.payload,
+                }
+            }
+        case SET_SERVICES:
+            {
+                return {
+                    ...state, services: action.payload,
                 }
             }
 

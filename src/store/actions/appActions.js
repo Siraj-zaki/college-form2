@@ -1,4 +1,4 @@
-import { SET_STUDENTS, SET_USERS, SET_CLASSES } from './types';
+import { SET_STUDENTS, SET_USERS, SET_CLASSES, SET_SERVICES } from './types';
 
 
 export const setUsers = (payload) => (
@@ -16,6 +16,12 @@ export const setClasses = (payload) => (
 export const setStudents = (payload) => (
     {
         type: SET_STUDENTS,
+        payload
+    }
+)
+export const setServices = (payload) => (
+    {
+        type: SET_SERVICES,
         payload
     }
 )

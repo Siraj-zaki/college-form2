@@ -3,14 +3,23 @@ import { Table } from 'react-bootstrap';
 import Header from '../header';
 import '../index.css'
 import Loader from 'react-loader-spinner'
+import { Loading } from "../components/Icons";
+import { connect } from "react-redux";
+import api from "../services/api";
+import { setLoading } from "../store/actions/globalActions";
+import { _getServices } from "../store/middlewares/appMiddleware";
 
-class TodoApp extends React.Component {
+class AddService extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       items: [],
       text: "",
+      name: '',
+      disp: '',
+      ammount: '',
+      inCode: props.user.inCode
 
     };
 
@@ -60,100 +69,114 @@ class TodoApp extends React.Component {
       items: [].concat(updatedItems)
     });
   }
+
+  addService = async (e) => {
+    e.preventDefault()
+    let service = {
+      name: this.state.name,
+      discription: this.state.disp,
+      ammount: this.state.ammount,
+      inCode: this.state.inCode
+    }
+
+    this.props.setLoading(true)
+    let res = await api.addService(this.props.token, service)
+    if (res) {
+      this.props._getServices(this.props.token, this.state.inCode)
+      alert('Service added successfully')
+    }
+    this.props.setLoading(false)
+  }
+
+
+
+
+
   render() {
+
+    const TodoList = ({ item }) => {
+      return (
+
+        <Table className='itemClass'  >
+          <thead style={{ width: 400 }} >
+            <td style={{ width: 400, justifyContent: 'space-between', display: 'flex' }}>
+              <span>{item.serviceName}</span>
+              <button type="button" className="btn btn-danger btn-sm" style={{ marginLeft: 50 }}>x</button>
+            </td>
+          </thead >
+        </Table>
+
+
+      );
+    }
+
+
     return (
 
       <div className='admin-page add-new-student'>
         <Header />
 
-        <h3 className="apptitle">Add New Services</h3>
-        <Name />
+        <h3 className="apptitle">Add Services</h3>
         <div style={{ alignSelf: 'flex-start' }}>
-          <form className="row">
-            <div className="col-md-8">
-              <input  type="text" className="form-control" onChange={this.handleTextChange} value={this.state.text} />
+          <form onSubmit={this.addService} >
+            <div className="form-row ">
+              <div class="form-group col-md-6">
+                <label for="first-name">Name</label>
+                <input required onChange={val => this.setState({ name: val.target.value })} type="text" class="form-control form-control-sm" id="first-name" placeholder="NAME"></input>
+              </div>
+              <div class="form-group col-md-12">
+                <label for="last-name">Description</label>
+                <textarea required onChange={val => this.setState({ disp: val.target.value })} class="form-control form-control-sm" id="last-name" placeholder="Description"></textarea>
+              </div>
             </div>
-            <button className="btn btn-primary" style={{ fontSize: '10px' }} onClick={this.handleAddItem} disabled={!this.state.text}>{"Add New Services #" + (this.state.items.length + 1)}</button>
+            <div className="form-row ">
+              <div class="form-group col-md-6">
+                <label for="first-name">Ammount</label>
+                <input required type="text" onChange={val => this.setState({ ammount: val.target.value })} class="form-control form-control-sm" id="first-name" placeholder="Ammount"></input>
+              </div>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary margin-top hide-on-print" style={{ height: 50, width: 200 }}  >
+              {
+                this.props.loading ?
+                  <Loading size={30} color='#fff' />
+                  :
+                  'Add Service'
+              }
+            </button>
           </form>
-          <div className="row" style={{ padding: '20px' }}>
-            <div className="col-md-12" >
-              <TodoList items={this.state.items} onItemCompleted={this.markItemCompleted} onDeleteItem={this.handleDeleteItem} />
-            </div>
-          </div>
         </div>
+
+        <ul className="todolist">
+          {
+           
+            this.props.services.map((item, index) =>
+              <TodoList key={index} item={item} />
+            )
+          }
+        </ul>
+
+
       </div>
     );
   }
 }
 
-export default (TodoApp);
-class TodoItem extends React.Component {
-  constructor(props) {
-    super(props);
-    this.markCompleted = this.markCompleted.bind(this);
-    this.deleteItem = this.deleteItem.bind(this);
+const mapState = state => {
+  return {
+    user: state.authReducers.user,
+    token: state.authReducers.token,
+    loading: state.globalReducers.loading,
+    services: state.appReducers.services,
   }
-  markCompleted(event) {
-    this.props.onItemCompleted(this.props.id);
-  }
-  deleteItem(event) {
-    this.props.onDeleteItem(this.props.id);
-  }
-  // Highlight newly added item for several seconds.
-  componentDidMount() {
-    if (this._listItem) {
-      // 1. Add highlight class.
-      this._listItem.classList.add("highlight");
-
-      // 2. Set timeout.
-      setTimeout((listItem) => {
-        // 3. Remove highlight class.
-        listItem.classList.remove("highlight");
-      }, 500, this._listItem);
-    }
-  }
-  render() {
-    return (
-      <Table className='itemClass' ref={li => this._listItem = li}  >
-        <thead style={{ width: 400 }} >
-          <td style={{ width: 400, justifyContent: 'space-between', display: 'flex' }}>
-            <span>{this.props.text}</span>
-            <button type="button" className="btn btn-danger btn-sm" onClick={this.deleteItem} style={{ marginLeft: 50 }}>x</button>
-          </td>
-        </thead >
-      </Table>
-    );
+}
+const mapDispatch = dispatch => {
+  return {
+    setLoading: bol => dispatch(setLoading(bol)),
+    _getServices: (token, code) => dispatch(_getServices(token, code))
   }
 }
 
-class TodoList extends React.Component {
-  render() {
-    return (
-      <ul className="todolist">
-        {this.props.items.map(item => (
-          <TodoItem key={item.id} id={item.id} text={item.text} completed={item.done} onItemCompleted={this.props.onItemCompleted} onDeleteItem={this.props.onDeleteItem} />
-        ))}
-      </ul>
-    );
-  }
-}
-class Name extends React.Component {
-  render() {
-    return (
-      <div style={{ alignSelf: 'flex-start' }}>
-        <form>
-          <div className="form-row ">
-            <div class="form-group col-md-6">
-              <label for="first-name">NAME</label>
-              <input type="text" class="form-control form-control-sm" id="first-name" placeholder="NAME"></input>
-            </div>
-            <div class="form-group col-md-12">
-              <label for="last-name">Description</label>
-              <textarea type="password" class="form-control form-control-sm" id="last-name" placeholder="Description"></textarea>
-            </div>
-          </div>
-        </form>
-      </div>
-    );
-  }
-}
+export default connect(mapState, mapDispatch)(AddService);
+

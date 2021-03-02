@@ -14,6 +14,7 @@ export const SET_SOCIAL_TOKEN = 'SET_SOCIAL_TOKEN'
 export const SET_USERS = 'SET_USERS'
 export const SET_CLASSES = 'SET_CLASSES'
 export const SET_STUDENTS = 'SET_STUDENTS'
+export const SET_SERVICES = 'SET_SERVICES'
  
 
 

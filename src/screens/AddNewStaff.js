@@ -12,17 +12,21 @@ import { Loading } from "../components/Icons";
 
 class AddNewStaff extends Component {
 
-    state = {
-        username: "",
-        password: "",
-        name: "",
-        insituteCode: "",
-        phone: "",
-        gender: "Male",
-        avatar: '',
-        email: '',
-        progress: 0
+    constructor(props) {
+        super(props);
+        this.state = {
+            username: "",
+            password: "",
+            name: "",
+            insituteCode:props.user.inCode ,
+            phone: "",
+            gender: "Male",
+            avatar: '',
+            email: '',
+            progress: 0
+        }
     }
+ 
 
 
 
@@ -130,9 +134,10 @@ class AddNewStaff extends Component {
                             <input onChange={(e) => this.setState({ name: e.target.value })} type="text" required class="form-control form-control-sm" id="first-name" placeholder="Name"></input>
                         </div>
                         <div class="form-group col-md-5">
-                            <label for="code">Institute Code</label>
-                            <input onChange={(e) => this.setState({ insituteCode: e.target.value })} required type="text" class="form-control form-control-sm" id="code" placeholder="Code"></input>
+                            <label for="last-name">Password</label>
+                            <input onChange={(e) => this.setState({ password: e.target.value })} type="password" required class="form-control form-control-sm" id="last-name" placeholder="Password"></input>
                         </div>
+                        
                     </div>
                     <ImageUpload new getFile={file => this.fileHandler(file)} />
 
@@ -152,10 +157,7 @@ class AddNewStaff extends Component {
                                 <option value="Other">Other</option>
                             </select>
                         </div>
-                        <div class="form-group col-md-5">
-                            <label for="last-name">Password</label>
-                            <input onChange={(e) => this.setState({ password: e.target.value })} type="password" required class="form-control form-control-sm" id="last-name" placeholder="Password"></input>
-                        </div>
+                        
                     </div>
 
                     {/* <button type="submit" class="btn btn-primary margin-top">Sign in</button> */}
