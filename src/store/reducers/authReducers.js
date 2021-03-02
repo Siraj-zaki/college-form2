@@ -7,8 +7,7 @@ const initialState = {
 const authReducers = (state = initialState, action) => {
     switch (action.type) {
         case LOGIN:
-            {
-                // console.log(action.coin)
+            { 
                 return {
                     ...state,
                     logged: true, token: action.token, user: action.info,

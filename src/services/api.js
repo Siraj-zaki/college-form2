@@ -26,37 +26,7 @@ const loginUser = async (email, pass) => {
     return getData
 
 }
-const socialLogin = async (socialID, type) => {
-
-    let getData = [];
-    let path;
-
-    let formData = new FormData();
-
-    if (type === 'facebook') {
-        formData.append('fbID', socialID);
-        path = Path.facebookLogin
-    }
-    else {
-        formData.append('GID', socialID);
-        path = Path.googleLogin
-    }
-
-    let req = new Request(path, { body: formData, method: 'POST' })
-
-
-    await fetch(req)
-        .then(res => res.json())
-        .then(dat => { getData = dat })
-        .catch(err => { alert("Login", err.message); getData = false })
-
-    if (getData?.success === 'false' || getData?.message === 'Auth failed') {
-        alert("Login", getData.message + ' Try another options.'); getData = false
-    }
-
-    return getData
-
-}
+ 
 const registerUser = async (user) => {
     let err = ''; let getData = []
 
@@ -184,7 +154,7 @@ const editUser = async (user) => {
 
     console.log('edit->', getData)
     if (getData?.success === 'false') {
-        alert("User", getData.message); getData = false
+        alert(getData.message); getData = false
     }
 
     return getData
@@ -209,14 +179,14 @@ const editUser = async (user) => {
 
 
 
-const getAllUsers = async (token) => {
+const getStaffByCode = async (token, code) => {
     //console.log('runn')
-    let getData = []; let err = '';
+    let getData = [];  
 
     var myHeaders = new Headers();
     myHeaders.append("Authorization", token);
 
-    let req = new Request(Path.getAllUsers, { headers: myHeaders, method: 'GET' })
+    let req = new Request(Path.getStaffByCode + code, { headers: myHeaders, method: 'GET' })
 
     await fetch(req)
         .then(res => res.json())
@@ -238,7 +208,7 @@ const addUser = async (token, user) => {
 
     var formdata = new FormData();
     formdata.append("name", user.name);
-    formdata.append("inCode", user.inCde);
+    formdata.append("inCode", user.inCode);
     formdata.append("password", user.password);
     formdata.append("userName", user.userName);
     formdata.append("phone", user.phone);
@@ -308,13 +278,13 @@ const getClass = async (token,) => {
     return getData
 
 }
-const getStudent = async (token,) => {
+const getStudentByCode = async (token, code) => {
     //console.log('runn')
-    let getData = []; let err = '';
+    let getData = [];
     var myHeaders = new Headers();
     myHeaders.append("Authorization", token);
 
-    let req = new Request(Path.getStudent, { method: 'GET', headers: myHeaders, })
+    let req = new Request(Path.getStudentByCode + code, { method: 'GET', headers: myHeaders, })
 
     await fetch(req,)
         .then(res => res.json())
@@ -377,7 +347,7 @@ const addStudent = async (token, student) => {
     formdata.append("email", student.email)
     formdata.append("mobileNo1", student.mobileNo1)
     formdata.append("fax", student.fax)
-    formdata.append("fee", student.fee)
+    formdata.append("stInCode", student.inCode)
     formdata.append("fatherCnic", student.fatherCnic)
     formdata.append("fatherName", student.fatherName)
     formdata.append("motherName", student.motherName)
@@ -386,7 +356,7 @@ const addStudent = async (token, student) => {
     formdata.append("classID", student.classID)
     formdata.append("avatar", student.avatar)
     formdata.append("rollNo", student.rollNo)
- 
+
 
     let req = new Request(Path.addStudent, { method: 'POST', headers: myHeaders, body: formdata, })
 
@@ -411,10 +381,10 @@ const addStudent = async (token, student) => {
 export default {
     loginUser, registerUser, checkEmail, sendEmail, setNewPassword, editUser,
 
-    getAllUsers, addUser, deleteUser,
+    getStaffByCode, addUser, deleteUser,
 
     getClass, addClass,
 
-    getStudent, addStudent,
+    getStudentByCode, addStudent,
 
 }

@@ -59,7 +59,7 @@ class Login extends React.Component {
 
 const mapState = state => {
   return {
-
+    user: state.authReducers.user
   }
 }
 const mapDispatch = dispatch => {

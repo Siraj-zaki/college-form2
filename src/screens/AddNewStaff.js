@@ -18,14 +18,17 @@ class AddNewStaff extends Component {
         name: "",
         insituteCode: "",
         phone: "",
-        gender: "",
+        gender: "Male",
         avatar: '',
         email: '',
         progress: 0
     }
 
+
+
     uploadHandler = (e) => {
         e.preventDefault();
+
         if (this.props.loading)
             return;
 
@@ -35,15 +38,18 @@ class AddNewStaff extends Component {
         if (!this.state.gender) {
             return alert('Gender is required')
         }
+        if (this.state.avatar && this.state.avatar.url) {
+            return this.setState({ loading: true }, () => this.finishAddStaff(this.state.avatar.url))
+        }
         this.props.setLoading(true)
-        let file = this.state.avatar
+        let file = this.state.avatar.file
         let name = this.state.username + new Date().toISOString()
         let dir = 'staff'
         let t = this;
         const uploadTask = firebase.default.storage().ref(dir + '/' + name).put(file)
         uploadTask.on('state_changed', function (snapshot) {
             var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            // setProgress(progress)
+            t.setState({ progress })
         }, function (error) {
             return alert(JSON.stringify(error))
             // Handle unsuccessful uploads
@@ -76,16 +82,24 @@ class AddNewStaff extends Component {
         let res = await api.addUser(this.props.token, user);
         if (res) {
             alert('Added Successfully')
-            await this.props._getAllUsers(this.props.token)
+            await this.props._getAllUsers(this.props.token, this.props.user.inCode)
             window.history.back()
         }
         this.setState({ progress: 0 })
         this.props.setLoading(false)
     }
 
+    fileHandler = (file) => {
+        let avatar = {
+            url: '',
+            file
+        }
+        this.setState({ avatar })
+    }
 
 
     render() {
+
 
         return (
             <div className='admin-page add-new-student'>
@@ -120,7 +134,7 @@ class AddNewStaff extends Component {
                             <input onChange={(e) => this.setState({ insituteCode: e.target.value })} required type="text" class="form-control form-control-sm" id="code" placeholder="Code"></input>
                         </div>
                     </div>
-                    <ImageUpload new getFile={file => this.setState({ avatar: file })} />
+                    <ImageUpload new getFile={file => this.fileHandler(file)} />
 
 
                     <div className="form-row">
@@ -132,7 +146,7 @@ class AddNewStaff extends Component {
                         <div class="form-group col-md-5 custom-select-sm">
                             <label for="gender">Gender</label><br />
                             <select onChange={(e) => this.setState({ gender: e.target.value })} required class="custom-select custom-select-sm" id="gender">
-                                <option selected>Select Gender</option>
+
                                 <option value="Male">Male</option>
                                 <option value="Femle">Female</option>
                                 <option value="Other">Other</option>
@@ -164,12 +178,13 @@ class AddNewStaff extends Component {
 const mapState = state => {
     return {
         token: state.authReducers.token,
-        loading: state.globalReducers.loading
+        loading: state.globalReducers.loading,
+        user: state.authReducers.user,
     }
 }
 const mapDispatch = dispatch => {
     return {
-        _getAllUsers: token => dispatch(_getAllUsers(token)),
+        _getAllUsers: (token, code) => dispatch(_getAllUsers(token, code)),
         setLoading: bol => dispatch(setLoading(bol))
     }
 }

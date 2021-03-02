@@ -6,9 +6,10 @@ import { _getAllUsers, _getStudents } from "../store/middlewares/appMiddleware";
 class Posts extends Component {
 
   componentDidMount() {
+    console.log(this.props.user)
     
-    this.props._getAllUsers(this.props.token)
-    this.props._getStudents(this.props.token)
+    this.props._getStudents(this.props.token,this.props.user.inCode)
+    this.props._getAllUsers(this.props.token,this.props.user.inCode)
   }
 
   render() {
@@ -25,13 +26,14 @@ class Posts extends Component {
 
 const mapState = state => {
   return {
-    token: state.authReducers.token
+    token: state.authReducers.token,
+    user: state.authReducers.user
   }
 }
 const mapDispatch = dispatch => {
   return {
-    _getAllUsers: token => dispatch(_getAllUsers(token)),
-    _getStudents: token => dispatch(_getStudents(token)),
+    _getAllUsers: (token,code )=> dispatch(_getAllUsers(token,code)),
+    _getStudents: (token,code) => dispatch(_getStudents(token,code)),
   }
 }
 

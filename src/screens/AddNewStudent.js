@@ -28,13 +28,13 @@ class AddNewStudent extends Component {
     contact: '',
     phoneNo: '',
     mobileNo1: '',
-    fax: '', fee: '',
+    fax: '',
     description: '',
     progress: 0,
     fatherCnic: '', guardain: '', fatherName: '',
     motherName: '',
     address: '',
-
+    inCode: this.props.user.inCode,
     email: '',
     rollNo: '',
   }
@@ -46,7 +46,7 @@ class AddNewStudent extends Component {
     }
 
   }
- 
+
   handleChange(evt, name) {
     this.setState({ [name]: evt.target.value });
   }
@@ -98,7 +98,7 @@ class AddNewStudent extends Component {
     let res = await api.addStudent(this.props.token, this.state)
     if (res) {
       alert('Student added Sucessfullly')
-      await this.props._getStudents(this.props.token)
+      await this.props._getStudents(this.props.token, this.state.inCode)
     }
     else {
       this.setState({ avatar: avatarObj })
@@ -141,17 +141,17 @@ class AddNewStudent extends Component {
           <ImageUpload getFile={file => this.imageHandler(file)} />
           <div className="form-row">
             <div class="form-group col-md-3">
-              <label for="date-of-birth">Date Of Birth </label>
+              <label for="date-of-birth">Date Of Birth *</label>
               <input required onChange={(event) => this.handleChange(event, "dateoOfBirth")} value={this.state.dateoOfBirth} type="date" class="form-control form-control-sm" id="date-of-birth"></input>
             </div>
             <div class="form-group col-md-3">
-              <label for="place-of-birth">Place Of Birth </label>
+              <label for="place-of-birth">Place Of Birth *</label>
               <input required onChange={(event) => this.handleChange(event, "placeOfbirth")} value={this.state.placeOfbirth} type="text" class="form-control form-control-sm" id="place-of-birth" placeholder="Place Of Birth"></input>
             </div>
           </div>
           <div className="form-row">
             <div class="form-group col-md-3">
-              <label for="Contact">Contact</label>
+              <label for="Contact">Contact *</label>
               <input required onChange={(event) => this.handleChange(event, "contact")} value={this.state.contact} type="number" class="form-control form-control-sm" id="Contact" placeholder="Contact"></input>
             </div>
             <div class="form-group col-md-2">
@@ -209,10 +209,7 @@ class AddNewStudent extends Component {
               <input onChange={(event) => this.handleChange(event, "fax")} value={this.state.fax} type="text" class="form-control form-control-sm" id="fax" placeholder="Fax"></input>
             </div>
 
-            <div class="form-group col-md-3">
-              <label for="Nationality">Fee </label>
-              <input onChange={(event) => this.handleChange(event, "fee")} value={this.state.fee} type="number" class="form-control form-control-sm" id="Nationality" placeholder="Fee"></input>
-            </div>
+
           </div>
           <div class="form-row">
             <div class="form-group col-md-3">
@@ -858,12 +855,13 @@ class AddNewStudent extends Component {
 const mapState = state => {
   return {
     token: state.authReducers.token,
-    loading: state.globalReducers.loading
+    loading: state.globalReducers.loading,
+    user: state.authReducers.user
   }
 }
 const mapDispatch = dispatch => {
   return {
-    _getStudents: token => dispatch(_getStudents(token)),
+    _getStudents: (token, code) => dispatch(_getStudents(token, code)),
     setLoading: bol => dispatch(setLoading(bol)),
   }
 }
