@@ -373,6 +373,27 @@ const addStudent = async (token, student) => {
 
 }
 
+const getServices = async (token, code) => {
+    //console.log('runn')
+    let getData = [];
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+
+    let req = new Request(Path.getStudentByCode + code, { method: 'GET', headers: myHeaders, })
+
+    await fetch(req,)
+        .then(res => res.json())
+        .then((dat) => getData = dat)
+        .catch(err => { alert(err.message); getData = false })
+
+    if (getData?.success === 'false') {
+        alert(getData.message); getData = false
+    }
+    console.log('getStudent->', getData)
+    return getData
+
+}
+
 
 
 

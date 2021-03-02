@@ -65,9 +65,9 @@ class TodoApp extends React.Component {
       <div className='admin-page add-new-student'>
         <Header />
 
-        <h3 className="apptitle" style={{ paddingBottom: 20 }}>Add New Fee</h3>
+        <h3 className="apptitle hide-on-print" style={{ paddingBottom: 20 }}>Add New Fee</h3>
         <Name />
-        <div style={{ alignSelf: 'flex-start' }}>
+        <div className='hide-on-print' style={{ alignSelf: 'flex-start' }}>
           <form className="row">
             <div className="col-md-8">
               <input type="text" className="form-control" onChange={this.handleTextChange} value={this.state.text} />
@@ -139,11 +139,40 @@ class TodoList extends React.Component {
   }
 }
 class Name extends React.Component {
+  state = {
+    Search: "",
+    TotalMonths: null,
+    TotalAmountPerMonths: null,
+    genrate: false,
+
+    dataarray: [
+      {
+        name: "Ali",
+        class: 'unpar',
+        semester: 'unknown',
+        rollno: '124',
+        totalfee: 5000,
+      },
+      {
+        name: "Ali",
+        class: 'unpar',
+        semester: 'unknown',
+        rollno: '124',
+        totalfee: 5000,
+      }, {
+        name: "Ali",
+        class: 'unpar',
+        semester: 'unknown',
+        rollno: '124',
+        totalfee: 5000,
+      }
+    ]
+  }
   render() {
     return (
-      <div style={{ alignSelf: 'flex-start' }}>
-        <form>
-          <div className="form-row ">
+      <div style={{ alignSelf: 'flex-start', width: '100%' }}>
+        <form style={{ width: '100%' }}>
+          {/* <div className="form-row ">
             <div class="form-group col-md-3">
               <label for="first-name">Name</label>
               <input type="text" class="form-control form-control-sm" id="first-name" placeholder="Name"></input>
@@ -156,8 +185,88 @@ class Name extends React.Component {
               <label for="last-name">Tax</label>
               <input type="text" class="form-control form-control-sm" id="last-name" placeholder="Tax"></input>
             </div>
+          </div> */}
+          <div className="search-bar hide-on-print">
+            <input type="text" id="search" onChange={(e) => this.setState({ Search: e.target.value })} placeholder="Search" />
           </div>
         </form>
+        <Table striped bordered hover size="sm" className="table hide-on-print">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Class</th>
+              <th>Semester</th>
+              <th>Roll No</th>
+              <th>Total Fee</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+
+            {
+              this.state.dataarray.map((student, index) =>
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{student.name}</td>
+                  <td>{student.class}</td>
+                  <td>{student.semester}</td>
+                  <td>{student.rollno}</td>
+                  <td>{student.totalfee}</td>
+                </tr>
+              )
+
+            }
+
+          </tbody>
+
+        </Table>
+
+        <h1 className="hide-on-print" style={{ textAlign: 'center', fontSize: 20 }}>Genrate Schedule</h1>
+        <div className="hide-on-print" style={{ width: 500, display: 'flex', justifyContent: "space-between", alignItems: 'center', margin: 10 }}>
+          <span>Total Months: </span>
+          <input className="total-months" type="number" name="text" value={this.state.TotalMonths} id="months" placeholder="0" onChange={(e) => this.setState({ TotalMonths: e.target.value })} />
+        </div>
+        <div className="hide-on-print" style={{ width: 500, display: 'flex', justifyContent: "space-between", alignItems: 'center', margin: 10 }}>
+          <span>Total Amount Per Months: </span>
+          <input className="total-months new-total-months" type="number" name="text" value={this.state.TotalAmountPerMonths} id="months" placeholder="0" onChange={(e) => this.setState({ TotalAmountPerMonths: e.target.value })} />
+        </div>
+        <button className='btn-primary m-2 hide-on-print' onClick={() => this.setState({ genrate: true })}>Genrate</button>
+        {
+          this.state.genrate &&
+          <div>
+            <Table striped bordered hover size="sm" className="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Due Date</th>
+                  <th>Amount</th>
+                  <th>Voucher Date</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+
+                {
+                  this.state.dataarray.map((student, index) =>
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>Due Date</td>
+                      <td>Amount</td>
+                      <td>Voucher Date</td>
+                    </tr>
+                  )
+
+                }
+
+              </tbody>
+
+            </Table>
+            <button className='btn-primary m-2 hide-on-print' onClick={() => window.print()}>Print</button>
+          </div>
+        }
       </div>
     );
   }
