@@ -1,5 +1,4 @@
-import api from '../../services/api';
-import { setError, setLoading } from '../actions/globalActions'
+import api from '../../services/api'; 
 import { setClasses, setServices, setStudents, setUsers } from '../actions/appActions'
 
 export const _getAllUsers = (token, code) => {

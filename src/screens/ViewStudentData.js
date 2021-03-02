@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import Header from '../header';
 import '../index.css'
-import { Table } from 'react-bootstrap';
-import Loader from 'react-loader-spinner'
+import { Table } from 'react-bootstrap'; 
 import { connect } from "react-redux";
 
 class ViewStudentData extends Component {

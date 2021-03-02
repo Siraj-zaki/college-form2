@@ -1,7 +1,5 @@
-import React, { Component } from "react";
-import Header from '../header';
+import React from "react";
 import '../index.css'
-import Loader from 'react-loader-spinner'
 export default class ImageUpload extends React.Component {
   constructor(props) {
     super(props);
@@ -10,12 +8,11 @@ export default class ImageUpload extends React.Component {
 
   _handleSubmit(e) {
     e.preventDefault();
-    // TODO: do something with -> this.state.file
-    console.log('handle uploading-', this.state.file);
+    // TODO: do something with -> this.state.file 
   }
 
   _handleImageChange(e) {
-    if (e.target.files[0] == undefined) {
+    if (!e.target.files[0]) {
       return
     }
     e.preventDefault();

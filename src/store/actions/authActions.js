@@ -1,4 +1,4 @@
-import { LOGIN, REGISTRATION, LOGOUT, UPDATE_INFO, UPDATE_COIN, SET_LOGGED, SET_AVATAR, SET_SOCIAL_TOKEN } from './types';
+import { LOGIN,   LOGOUT, UPDATE_INFO, SET_LOGGED, SET_AVATAR,  } from './types';
 
 
 export const login = (token, info) => (

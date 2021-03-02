@@ -1,7 +1,5 @@
-import React, { Component } from "react";
-import { NavLink } from "react-router-dom"
-import '../index.css'
-import Loader from 'react-loader-spinner'
+import React from "react"; 
+import '../index.css' 
 import { connect } from "react-redux";
 import { setLogged } from '../store/actions/authActions'
 import { _login } from "../store/middlewares/authMiddleware";

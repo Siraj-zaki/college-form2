@@ -1,6 +1,6 @@
 import api from '../../services/api';
 import { login, setAvatar, updateInfo } from '../actions/authActions'
-import { setLoading, setError } from '../actions/globalActions'
+import { setLoading,  } from '../actions/globalActions'
 import jwt_decode from "jwt-decode";
 
 export const _login = (cCode, email, pass) => {
@@ -26,7 +26,7 @@ export const _login = (cCode, email, pass) => {
 export const _sendEmail = (email, num) => {
 
     return async (dispatch, getState) => {
-        let res = await api.sendEmail(email, num)
+        // let res = await api.sendEmail(email, num)
     }
 }
 

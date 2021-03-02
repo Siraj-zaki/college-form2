@@ -1,5 +1,4 @@
-export const LOGIN = 'LOGIN';
-export const REGISTRATION = 'REGISTRATION'
+export const LOGIN = 'LOGIN'; 
 export const LOGOUT = 'LOGOUT'
 export const LOGGED = 'LOGGED'
 export const SET_LOGGED = 'SET_LOGGED'
@@ -22,5 +21,4 @@ export const SET_SERVICES = 'SET_SERVICES'
 
 // global
 export const LOADING = 'LOADING'
-export const ERROR = 'ERROR'
-export const FONT = 'FONT'
+export const ERROR = 'ERROR' 

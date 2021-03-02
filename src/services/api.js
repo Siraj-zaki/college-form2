@@ -1,8 +1,6 @@
 
 import { Path } from './Path'
 
-
-
 const loginUser = async (email, pass) => {
 
     let getData = [];
@@ -28,7 +26,7 @@ const loginUser = async (email, pass) => {
 }
 
 const registerUser = async (user) => {
-    let err = ''; let getData = []
+    let getData = []
 
     var formdata = new FormData();
     formdata.append("avatar", user.avatar);
@@ -76,34 +74,36 @@ const registerUser = async (user) => {
 
 const checkEmail = async (email) => {
     //console.log('runn')
-    let getData = []; let err = '';
+    let getData = [];
 
     let req = new Request(Path.checkEmail + email)
 
     await fetch(req)
         .then(res => res.json())
         .then(res => getData = res)
-        .catch(err => err = err)
+        .catch(err => console.log(err))
 
-    if (err === '') { return getData }
-    else { return err }
+
+    return getData
 
 }
 const sendEmail = async (email, num) => {
     //console.log('runn')
-    let getData = []; let err = '';
+    let getData = [];
 
     let req = new Request(Path.sendEmail + email + '/' + num)
 
     await fetch(req)
         .then(res => res.json())
         .then(res => getData = res)
-        .catch(err => err = err)
+        .catch(err => console.log(err))
+
+    return getData
 
 }
 const setNewPassword = async (email, pass) => {
     //console.log('runn')
-    let getData = []; let err = '';
+    let getData = [];
 
     let formdata = new FormData();
     formdata.append("email", email);
@@ -125,7 +125,7 @@ const setNewPassword = async (email, pass) => {
 
 const editUser = async (user) => {
     //console.log('runn')
-    let getData = []; let err = '';
+    let getData = [];
     // let h = new Headers();
     // h.append('Authorization', token)
     var formdata = new FormData();
@@ -149,7 +149,7 @@ const editUser = async (user) => {
 
     await fetch(req)
         .then(res => res.json())
-        .then((dat) => { getData = dat; console.log(dat) })
+        .then((dat) => { getData = dat; })
         .catch(err => { alert("User", err.message); getData = false })
 
     console.log('edit->', getData)
@@ -202,7 +202,7 @@ const getStaffByCode = async (token, code) => {
 }
 const addUser = async (token, user) => {
     //console.log('runn')
-    let getData = []; let err = '';
+    let getData = [];
     var myHeaders = new Headers();
     myHeaders.append("Authorization", token);
 
@@ -255,12 +255,33 @@ const deleteUser = async (token, uid) => {
 
 }
 
+const deleteService = async (token, sid) => {
+    //console.log('runn')
+    let getData = [];
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", token);
+
+    let req = new Request(Path.deleteService + sid, { method: 'DELETE', headers: myHeaders, })
+
+    await fetch(req,)
+        .then(res => res.json())
+        .then((dat) => getData = dat)
+        .catch(err => { alert(err.message); getData = false })
+
+    if (getData?.success === 'false') {
+        alert(getData.message); getData = false
+    }
+    console.log('deleteService->', getData)
+    return getData
+
+}
+
 
 
 
 const getClass = async (token,) => {
     //console.log('runn')
-    let getData = []; let err = '';
+    let getData = [];
     var myHeaders = new Headers();
     myHeaders.append("Authorization", token);
 
@@ -302,7 +323,7 @@ const getStudentByCode = async (token, code) => {
 
 const addClass = async (token, c) => {
     //console.log('runn')
-    let getData = []; let err = '';
+    let getData = [];
     var myHeaders = new Headers();
     myHeaders.append("Authorization", token);
 
@@ -435,6 +456,6 @@ export default {
 
     getStudentByCode, addStudent,
 
-    addService, getServicesbyCode,
+    addService, getServicesbyCode, deleteService
 
 }

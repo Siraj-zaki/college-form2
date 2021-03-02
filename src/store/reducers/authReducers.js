@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, REGISTRATION, UPDATE_INFO, UPDATE_COIN, SET_LOGGED, SET_AVATAR, SET_SOCIAL_TOKEN, SET_FRIENDS } from '../actions/types'
+import { LOGIN, LOGOUT,  SET_LOGGED, SET_AVATAR, SET_SOCIAL_TOKEN, } from '../actions/types'
 
 const initialState = {
     logged: false, user: false,
@@ -15,12 +15,7 @@ const authReducers = (state = initialState, action) => {
                 }
             }
 
-        case UPDATE_INFO:
-            {
-                return {
-                    ...state, user: action.info
-                }
-            }
+      
 
         case LOGOUT:
             {

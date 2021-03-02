@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 // import { Modal, Button } from "bootstrap";
-import { Modal, ModalBody, ModalFooter, ModalDialog, Button } from "react-bootstrap";
+import { Modal, ModalBody, ModalFooter, Button } from "react-bootstrap";
 
 export default ({ title, body, doText, cancelText, show, onCancelClick, onDoClick }) => {
 
-     
+
 
     return (
 

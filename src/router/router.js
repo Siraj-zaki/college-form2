@@ -13,10 +13,8 @@ import FeeCollection from '../screens/FeeCollection';
 import FeeReport from '../screens/FeeReport';
 import ViewStudentData from '../screens/ViewStudentData';
 import ClassForm from '../screens/ClassForm';
-import ClassGeneration from '../screens/ClassGeneration';
-import { PersistGate } from "redux-persist/integration/react";
-import { connect, Provider } from "react-redux";
-import store from "../store/store";
+import ClassGeneration from '../screens/ClassGeneration'; 
+import { connect,  } from "react-redux"; 
 // import {store,per} from '../store/store'
 
 class ReactRouter extends React.Component {

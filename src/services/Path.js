@@ -24,6 +24,7 @@ export const Path = {
     addService: baseUrl + 'service',
     
     deleteUser: baseUrl + 'user/',
+    deleteService: baseUrl + 'service/',
 
 
 }

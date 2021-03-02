@@ -1,4 +1,4 @@
-import { LOADING, ERROR, FONT } from './types'
+import { LOADING, } from './types'
 
 export const setLoading = (val) => (
     {
@@ -6,10 +6,5 @@ export const setLoading = (val) => (
         val: val
     }
 )
-export const setError = (val) => (
-    {
-        type: ERROR,
-        val: val
-    }
-)
+ 
 

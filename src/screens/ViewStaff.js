@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import Header from '../header';
 import '../index.css'
-import { Table } from 'react-bootstrap';
-import Loader from 'react-loader-spinner'
+import { Table } from 'react-bootstrap'; 
 import pic from '../assets/img.jpg'
 import { connect } from "react-redux";
 import api from "../services/api";

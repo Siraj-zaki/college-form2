@@ -1,8 +1,7 @@
-import React, { Component } from "react";
+import React  from "react";
 import { Table } from 'react-bootstrap';
 import Header from '../header';
-import '../index.css'
-import Loader from 'react-loader-spinner'
+import '../index.css' 
 class FeeCollection extends React.Component {
     constructor() {
         super();
