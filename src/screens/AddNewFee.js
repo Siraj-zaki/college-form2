@@ -11,9 +11,9 @@ class AddNewFee extends React.Component {
     super(props);
 
     this.state = {
-      searchResults: [], searchKey: '',
+      searchResults: [],
       month: '', selected: { fee: 100 },
-      cnic:'',
+      cnic: '', feeVoucher: false, perMonth: false
     };
 
 
@@ -32,7 +32,7 @@ class AddNewFee extends React.Component {
   cnicHandler = (cnic) => {
 
     if (this.state.cnic.length - 1 === cnic.length) {
-      cnic = cnic.slice(0, cnic.length )
+      cnic = cnic.slice(0, cnic.length)
     }
     else if (cnic.length === 5 || cnic.length === 13) {
       cnic += '-'
@@ -46,7 +46,42 @@ class AddNewFee extends React.Component {
 
   }
 
+  getNextDate = (index) => {
+    var tomorrow = new Date();
+    tomorrow.setDate(new Date().getDate() + index);
+    return tomorrow.toDateString()
+  }
+
+  generateFee = () => {
+
+
+    let fee = []
+    let totFee = parseInt(this.state.selected.fee)
+    if (this.state.perMonth) {
+      let index = 0
+      while (totFee >= this.state.month) {
+
+        fee.push({ amount: this.state.month, vDate: new Date().toDateString(), dDate: this.getNextDate(index * 30) })
+        totFee = totFee - this.state.month
+        index++
+        console.log(totFee)
+      }
+      if (totFee > 0) {
+        fee.push({ amount: totFee, vDate: new Date().toDateString(), dDate: this.getNextDate(index * 30) })
+      }
+    }
+    else {
+
+      for (let index = 1; index <= this.state.month; index++) {
+        fee.push({ amount: totFee / this.state.month, vDate: new Date().toDateString(), dDate: this.getNextDate(index * 30) })
+      }
+
+    }
+    this.setState({ feeVoucher: fee })
+  }
+
   render() {
+
 
     return (
 
@@ -58,7 +93,7 @@ class AddNewFee extends React.Component {
           <form style={{ width: '100%' }}>
 
             <div className="search-bar hide-on-print">
-              <input type="text" id="search"  onChange={(e) => this.searchHandler(e.target.value)} placeholder="Search" />
+              <input type="text" id="search" onChange={(e) => this.searchHandler(e.target.value)} placeholder="Search Student" />
             </div>
           </form>
           {
@@ -76,7 +111,7 @@ class AddNewFee extends React.Component {
               </thead>
               {
                 this.state.searchResults.map((student, index) =>
-                  <tr key={index} onClick={() => this.setState({ selected: student })} >
+                  <tr key={index} style={{ background: this.state.selected === student ? '#fff000' : 'tranparent' }} onClick={() => this.setState({ selected: student })} >
                     <td>{index + 1}</td>
                     <td>{student.firstName + ' ' + student.lastName}</td>
                     <td>{student.className}</td>
@@ -91,21 +126,27 @@ class AddNewFee extends React.Component {
           }
 
           <h1 className="hide-on-print" style={{ textAlign: 'center', fontSize: 20 }}>Genrate Schedule</h1>
+
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <input type="radio" value="Male" defaultChecked onChange={() => this.setState({ perMonth: false })} name="gender" style={{ marginRight: 10 }} />
+            <label >Total Months</label>
+            <input type="radio" value="Female" onChange={() => this.setState({ perMonth: true })} name="gender" style={{ marginLeft: 20, marginRight: 10 }} />
+            <label>Total Amount Per Months</label>
+          </div>
+
           <div className="hide-on-print" style={{ width: 500, display: 'flex', justifyContent: "space-between", alignItems: 'center', margin: 10 }}>
-            <span>Total Months: </span>
+            <span>{this.state.perMonth ? 'Total Amount Per Months:' : 'Total Months:'} </span>
             <input className="total-months" type="number" name="text" value={this.state.month} id="months" placeholder="0" onChange={(e) => this.setState({ month: e.target.value })} />
           </div>
-          <div className="hide-on-print" style={{ width: 500, display: 'flex', justifyContent: "space-between", alignItems: 'center', margin: 10 }}>
-            <span>Total Amount Per Months: </span>
-            <input className="total-months new-total-months" disabled name="text" style={{ background: '#fff' }} value={this.state.month ? comma(parseInt(this.state.selected.fee / this.state.month)) : null} id="months" placeholder="0" />
-          </div>
+
+
           <div className="hide-on-print" style={{ width: 500, display: 'flex', justifyContent: "space-between", alignItems: 'center', margin: 10 }}>
             <span>cnic </span>
-            <input className="total-months new-total-months" type='number' value={this.state.cnic} onChange={(e) => this.cnicHandler(e.target.value)} id="months" placeholder="12345-1234567-1" />
+            <input className="total-months new-total-months" value={this.state.cnic} onChange={(e) => this.cnicHandler(e.target.value)} id="months" placeholder="12345-1234567-1" />
           </div>
-          <button className='btn-primary m-2 hide-on-print' onClick={() => this.setState({ genrate: true })}>Genrate</button>
+          <button className='btn-primary m-2 hide-on-print' onClick={this.generateFee}>Genrate</button>
           {
-            this.state.genrate &&
+            this.state.feeVoucher &&
             <div>
               <Table striped bordered hover size="sm" className="table">
                 <thead>
@@ -119,12 +160,12 @@ class AddNewFee extends React.Component {
 
                 <tbody>
                   {
-                    this.state.searchResults.map((student, index) =>
+                    this.state.feeVoucher.map((voucher, index) =>
                       <tr key={index}>
                         <td>{index + 1}</td>
-                        <td>Due Date</td>
-                        <td>Amount</td>
-                        <td>Voucher Date</td>
+                        <td>{voucher.dDate}</td>
+                        <td>{comma(voucher.amount)}</td>
+                        <td>{voucher.vDate}</td>
                       </tr>
                     )}
 

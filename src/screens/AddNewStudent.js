@@ -11,7 +11,8 @@ import api from "../services/api";
 import * as firebase from 'firebase'
 import { Loading } from "../components/Icons";
 import { ProgressBar } from 'react-bootstrap'
-import { setLoading } from "../store/actions/globalActions";
+import { setLoading } from "../store/actions/globalActions"; 
+import {cnicHandler} from '../components/Functions'
 
 class AddNewStudent extends Component {
   state = {
@@ -23,7 +24,7 @@ class AddNewStudent extends Component {
     bloodGroup: 'A+',
     studentCnic: '',
     gender: 'Male',
-    avatar: '', 
+    avatar: '',
     contact: '',
     phoneNo: '',
     mobileNo1: '',
@@ -49,6 +50,8 @@ class AddNewStudent extends Component {
   handleChange(evt, name) {
     this.setState({ [name]: evt.target.value });
   }
+
+ 
 
   uploadHandler = (e) => {
     e.preventDefault();
@@ -89,6 +92,8 @@ class AddNewStudent extends Component {
 
 
   }
+
+
 
 
   finishAddStudent = async (url) => {
@@ -174,7 +179,7 @@ class AddNewStudent extends Component {
 
             <div class="form-group col-md-3">
               <label for="student-cnic">Student CNIC *</label>
-              <input required onChange={(event) => this.handleChange(event, "studentCnic")} value={this.state.studentCnic} type="text" class="form-control form-control-sm" id="student-cnic" placeholder="Student CNIC"></input>
+              <input required maxLength='15' onChange={(event) => this.setState({ studentCnic:  cnicHandler(this.state.studentCnic,event.target.value) })} value={this.state.studentCnic} type="text" class="form-control form-control-sm" id="student-cnic" placeholder="Student CNIC"></input>
             </div>
             <div class="form-group col-md-3">
               <label for="phone">Phone No </label>
@@ -213,7 +218,7 @@ class AddNewStudent extends Component {
           <div class="form-row">
             <div class="form-group col-md-3">
               <label for="icnic-1">Father CNIC *</label>
-              <input required onChange={(event) => this.handleChange(event, "fatherCnic")} value={this.state.fatherCnic} type="text" class="form-control form-control-sm" id="cnic-1" placeholder="CNIC" ></input>
+              <input required maxLength='15' onChange={(event) => this.setState({ fatherCnic: cnicHandler(this.state.fatherCnic,event.target.value) })} value={this.state.fatherCnic} type="text" class="form-control form-control-sm" id="cnic-1" placeholder="CNIC" ></input>
             </div>
             <div class="form-group col-md-3">
               <label for="Guardian">Guardian</label>
